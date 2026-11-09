@@ -1,0 +1,120 @@
+@font-face{font-family:'Ubuntu Sans';src:url('../assets/fonts/UbuntuSans-variable.woff2') format('woff2');font-weight:100 800;font-stretch:75% 100%}
+:root{font-family:"Ubuntu Sans",sans-serif;font-size:14px;font-weight:450;--kds-sem-typography-small-text-bold:750 14px/20px "Ubuntu Sans";--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--kds-sem-color-bg-primary-default:#ff3c00;--kds-sem-color-text-gray-emphasis:#151923;--kds-sem-typography-font-weight-bold-plus:750;--kds-sem-border-radius-4:4px;--kds-sem-color-bg-container-low-default:#f7f9fc;--kds-sem-color-text-gray-subtle:#526789;--kds-sem-typography-font-family-default:"Ubuntu Sans";--kds-global-typography-font-weight-regular:;--kds-sem-color-bg-container-lowest-default:#fff;--kds-sem-color-border-container-lowest:#e2e8f8;--kds-sem-color-bg-gray-pale-default:#fff;--kds-sem-color-text-gray-soft:#60739f;--kds-sem-typography-font-weight-regular-plus:450;--kds-sem-color-bg-gradient-primary-emphasis-start:#ff3c00;--kds-sem-color-bg-gradient-primary-emphasis-end:#ff0078;--kds-sem-color-bg-gray-subtle-default:#eaeefb;--kds-sem-color-fg-gray-strong:#2a3346;--kds-sem-color-fg-green-bold:#169c43;--kds-sem-color-text-gray-strong:#2a3346;--kds-sem-color-text-green:#107030;--kds-sem-color-bg-green-pale:#f0fff4;--kds-sem-color-border-green-bold:#169c43;}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, button, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0px; padding: 0px; border: 0px; font: inherit; vertical-align: baseline; box-sizing: border-box; }
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+a { }
+svg { display: block; }
+* { }
+.router-link-active, .router-link-exact-active { text-decoration: none; }
+.kds-sem-typography-small-text-bold { font: var(--kds-sem-typography-small-text-bold) !important; }
+svg { outline: none; }
+*, ::before, ::after { --tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / .5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; }
+.kaizen-betting { overflow: hidden; }
+.kaizen-betting svg { outline: none; }
+*, ::before, ::after { --tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / .5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; }
+.kaizen-betting .kb-relative { position: relative; }
+.kaizen-betting .kb-z-10 { z-index: 10; }
+.kaizen-betting .kb-ml-\[-20px\] { margin-left: -20px; }
+.kaizen-betting .kb-ml-s { margin-left: 4px; }
+.kaizen-betting .kb-mr-n { margin-right: 8px; }
+.kaizen-betting .kb-mt-n { margin-top: 8px; }
+.kaizen-betting .kb-flex { display: flex; }
+.kaizen-betting .kb-h-\[22px\] { height: 22px; }
+.kaizen-betting .kb-h-\[34px\] { height: 34px; }
+.kaizen-betting .kb-h-\[39px\] { height: 39px; }
+.kaizen-betting .kb-h-auto { height: auto; }
+.kaizen-betting .kb-min-h-\[200px\] { min-height: 200px; }
+.kaizen-betting .kb-w-full { width: 100%; }
+.kaizen-betting .kb-min-w-\[22px\] { min-width: 22px; }
+.kaizen-betting .kb-max-w-\[100px\] { max-width: 100px; }
+.kaizen-betting .kb-flex-shrink-0, .kaizen-betting .kb-shrink-0 { flex-shrink: 0; }
+.kaizen-betting .kb-translate-y-\[7px\] { --tw-translate-y: 7px; transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+.kaizen-betting .kb-cursor-pointer { cursor: pointer; }
+.kaizen-betting .kb-flex-col { flex-direction: column; }
+.kaizen-betting .kb-items-start { align-items: flex-start; }
+.kaizen-betting .kb-items-end { align-items: flex-end; }
+.kaizen-betting .kb-items-center { align-items: center; }
+.kaizen-betting .kb-gap-n { gap: 8px; }
+.kaizen-betting .kb-self-start { align-self: flex-start; }
+.kaizen-betting .kb-overflow-hidden { overflow: hidden; }
+.kaizen-betting .kb-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kaizen-betting .kb-bg-sem-color-bg-primary-default { background-color: var(--kds-sem-color-bg-primary-default); }
+.kaizen-betting .kb-bg-right-top { background-position: right top; }
+.kaizen-betting .kb-bg-no-repeat { background-repeat: no-repeat; }
+.kaizen-betting .kb-p-n { padding: 8px; }
+.kaizen-betting .kb-px-n { padding-left: 8px; padding-right: 8px; }
+.kaizen-betting .kb-py-0 { padding-top: 0px; padding-bottom: 0px; }
+.kaizen-betting .kb-pb-n { padding-bottom: 8px; }
+.kaizen-betting .kb-pb-ns { padding-bottom: 10px; }
+.kaizen-betting .kb-pl-ml { padding-left: 20px; }
+.kaizen-betting .kb-pl-n { padding-left: 8px; }
+.kaizen-betting .kb-pt-0 { padding-top: 0px; }
+.kaizen-betting .kb-pt-ml { padding-top: 20px; }
+.kaizen-betting .kb-text-sem-color-text-gray-emphasis { color: var(--kds-sem-color-text-gray-emphasis); }
+.kaizen-betting .kb-transition-transform { transition-property: transform; }
+.kaizen-betting .kb-duration-\[200ms\], .kaizen-betting .kb-duration-base { transition-duration: 0.2s; }
+.kaizen-betting .kb-ease-in { transition-timing-function: cubic-bezier(0.36, 0, 1, 1); }
+.odds-ticker[data-v-e93fc5f7] { display: inline-block; padding: 4px 8px; font-size: 0.857143rem; font-weight: var(--kds-sem-typography-font-weight-bold-plus); line-height: 16px; color: var(--kds-sem-color-text-gray-emphasis); border-radius: var(--kds-sem-border-radius-4); transition: background-color 0.2s, color 0.2s, transform 0.2s; }
+.odds-ticker-solid[data-v-e93fc5f7] { background-color: var(--kds-sem-color-bg-container-low-default); }
+.market-label[data-v-0641ca25] { word-break: break-word; color: var(--kds-sem-color-text-gray-subtle); font-family: var(--kds-sem-typography-font-family-default); font-weight: var(--kds-global-typography-font-weight-regular); font-size: 13px; line-height: 18px; cursor: default; display: initial; }
+.selection-label[data-v-c8a49f94] { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis; min-width: 0px; word-break: break-word; color: var(--kds-sem-color-text-gray-emphasis); letter-spacing: 0px; cursor: default; }
+.bet-activity-card[data-v-726cf5c3] { position: relative; background: var(--kds-sem-color-bg-container-lowest-default); padding: 12px; margin: 0px 8px 8px; border-radius: 12px; }
+.bet-activity-card--hasBorder[data-v-726cf5c3] { border: 1px solid var(--kds-sem-color-border-container-lowest); }
+.bet-activity-card--with-header[data-v-726cf5c3] { padding: 0px; }
+.bet-activity-card--with-header .main-content[data-v-726cf5c3] { padding-top: 8px; padding-left: 8px; padding-right: 8px; }
+.bet-activity-card--zeroMargin[data-v-726cf5c3] { margin: 0px; }
+.card-header[data-v-521ca94a] { display: flex; align-items: center; border-radius: 8px 8px 0px 0px; background-color: var(--kds-sem-color-bg-gray-pale-default); }
+.card-header--has-no-background[data-v-521ca94a] { background: none; }
+.card-header--has-divider[data-v-521ca94a] { border-bottom: 1px solid var(--kds-sem-color-border-container-lowest); }
+.card-header__left[data-v-521ca94a] { display: flex; align-items: center; flex: 1 1 0%; min-width: 0px; }
+.card-header__right[data-v-521ca94a] { display: flex; align-items: center; min-width: 0px; }
+.bet-label[data-v-7d571c89] { display: flex; max-width: 100%; min-width: 0px; font-size: 0.857143rem; line-height: 16px; color: var(--kds-sem-color-text-gray-emphasis); transition: 0.2s ease-in; }
+.bet-label--is-expanded[data-v-7d571c89] { transform: translateY(8px); }
+.bet-label__title[data-v-7d571c89] { font-weight: var(--kds-sem-typography-font-weight-bold-plus); }
+[data-v-a96ebc33] { will-change: height; transform: translateZ(0px); backface-visibility: hidden; perspective: 1000px; }
+.participants[data-v-c82b8e13] { display: flex; flex-direction: column; gap: 2px; font-size: 0.857143rem; line-height: 16px; }
+.participants__participant[data-v-c82b8e13] { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 4px; }
+.participants__participant-name[data-v-c82b8e13] { text-overflow: ellipsis; display: inline-block; vertical-align: top; white-space: nowrap; overflow: hidden; width: auto; }
+.event-info[data-v-774d7d63] { display: flex; align-items: center; }
+.event-info__link[data-v-774d7d63] { text-decoration: none; display: flex; flex-direction: column; min-width: 0px; margin-right: 2px; color: var(--kds-sem-color-text-gray-emphasis); font-family: var(--kds-sem-typography-font-family-default); font-weight: var(--kds-global-typography-font-weight-regular); font-size: 13px; line-height: 18px; }
+.leg-info__header[data-v-67d59e65] { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.leg-info__header .section-left[data-v-67d59e65] { display: flex; align-items: center; gap: 4px; min-width: 0px; }
+.leg-info__header .section-right[data-v-67d59e65] { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.leg-info__main[data-v-67d59e65] { padding-left: 26px; display: flex; flex-direction: column; gap: 4px; }
+.bet-event-date-time[data-v-5e7523fe] { margin-left: auto; text-align: end; color: var(--kds-sem-color-text-gray-soft); flex-shrink: 0; font-size: 0.857143rem; line-height: 16px; }
+.bet-leg-item-bottom-wrapper[data-v-b4fe2e5b]:not(:has(> div > *)) { display: none; }
+.total-amounts[data-v-1020b733] { background: var(--kds-sem-color-bg-container-lowest-default); padding: 8px 8px 0px; }
+.total-amounts--my-bets[data-v-1020b733] { padding-left: 0px; padding-right: 0px; padding-top: 0px; }
+.total-amounts[data-v-1020b733]:empty { padding: 0px; }
+.bet-card--light[data-v-18375c16] { font-family: inherit; font-size: 14px; font-weight: var(--kds-sem-typography-font-weight-regular-plus); text-size-adjust: 100%; color: rgb(28, 32, 38); --bet-list-bg: #f6f8f9; --bet-activity-card-bg: #ffffff; --bet-activity-card-border: #e0e4ea; --bet-activity-card-bg-superkombi: #e0e4ea; --bet-activity-card-header-bg: #e0e4ea; --bet-activity-card-header--no-bg: none; --bet-activity-card-header--divider-bottom: #e0e4ea; --bet-activity-card-combo-title-color: #1b67da; --bet-activity-card-header-divider-color: #b6bcc6; --bet-activity-card-emphasised-color: #1c2026; --market-color: #69778b; --team-color: #2d3745; --event-color: #2d3745; --time-color: #69778b; --score-highlight-color: #1b67da; --score-bold-color: #69778b; --divider-color: #eceff1; --sub-divider-color: #eceff1; --total-amounts-bg: #ffffff; --total-amounts-label: #69778b; --total-amounts-value: #101419; --cashout-button-border-color: transparent; --cashout-button-bg: #2d3745; --toggle-button-color: #2d3745; --toggle-button-divider-color: #eceff1; --toggle-button-color-large: #1c2026; --toggle-button-divider-color-large: #b6bcc6; --date-color: #69778b; --leg-items-list-divider: #eceff1; --leg-items-list-item-divider: #e0e4ea; }
+.share-bet-modal * { letter-spacing: 0.01px; }
+.share-bet-modal__body { background: linear-gradient(180deg,var(--kds-sem-color-bg-gradient-primary-emphasis-start) 0%,var(--kds-sem-color-bg-gradient-primary-emphasis-end) 100%); }
+.share-bet-modal__content .bet-activity-card, .share-bet-modal__content .bet-activity-card--zeroMargin { margin: 0px 8px 8px; }
+.total-amounts { border-radius: 8px 8px 0px 0px; }
+.share-bet-modal__body { min-height: 270.4px; }
+[class*="kz-icon"] { display: inline-block; vertical-align: text-bottom; background-size: cover; }
+.kz-icon-xxs { width: 16px; height: 16px; }
+.kaizen-betting [class*="kz-icon"] { display: inline-block; vertical-align: text-bottom; background-size: cover; }
+.kaizen-betting .kz-icon-xxs { width: 16px; height: 16px; }
+.kaizen-betting .kb-ml-0 { margin-left: 0px; }
+.kaizen-betting .kb-ml-auto { margin-left: auto; }
+.kaizen-betting .kb-mr-s { margin-right: 4px; }
+.kaizen-betting .kb-h-icon-xxxs { height: 12px; }
+.kaizen-betting .kb-w-fit { width: fit-content; }
+.kaizen-betting .kb-w-icon-xxxs { width: 12px; }
+.kaizen-betting .kb-min-w-\[16px\] { min-width: 16px; }
+.kaizen-betting .kb-gap-xs { gap: 2px; }
+.kaizen-betting .kb-whitespace-nowrap { white-space: nowrap; }
+.kaizen-betting .kb-rounded-m { border-radius: 16px; }
+.kaizen-betting .kb-bg-sem-color-bg-gray-subtle-default { background-color: var(--kds-sem-color-bg-gray-subtle-default); }
+.kaizen-betting .kb-fill-current { fill: currentcolor; }
+.kaizen-betting .kb-py-s { padding-top: 4px; padding-bottom: 4px; }
+.kaizen-betting .kb-text-xxs { font-size: 0.785714rem; }
+.kaizen-betting .kb-leading-xs { line-height: 12px; }
+.kaizen-betting .kb-text-sem-color-fg-gray-strong { color: var(--kds-sem-color-fg-gray-strong); }
+.kaizen-betting .kb-text-sem-color-fg-green-bold { color: var(--kds-sem-color-fg-green-bold); }
+.kaizen-betting .kb-text-sem-color-text-gray-strong { color: var(--kds-sem-color-text-gray-strong); }
+.kaizen-betting .kb-icon { display: inline-block; vertical-align: text-bottom; background-size: cover; }
+.bet-label--hasBackground[data-v-7d571c89] { padding: 1px 8px; border: 1px solid; border-radius: 16px; margin-left: 4px; }
+.bet-label--hasBackground.bet-label--Win[data-v-7d571c89] { color: var(--kds-sem-color-text-green); background: var(--kds-sem-color-bg-green-pale); border-color: var(--kds-sem-color-border-green-bold); }
+body{width:360px;margin:0;zoom:1.25;line-height:1}.share-bet-modal__body{min-height:270.4px}

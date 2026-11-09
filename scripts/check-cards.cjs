@@ -14,6 +14,9 @@ async function main() {
   for (const name of ['index.html', 'styles.css', 'app.js', 'markets.js', 'card-model.js', 'card-renderer.js', 'assets']) {
     await fs.cp(path.join(project, name), path.join(site, name), { recursive: true });
   }
+  await fs.cp(path.join(project, 'tests/fixtures'), path.join(site, '_references'), { recursive: true });
+  const originalFontHash = (await fs.readFile(path.join(project, 'tests/fixtures/font.sha256'), 'utf8')).trim();
+  assert.equal(createHash('sha256').update(await fs.readFile(path.join(site, 'assets/fonts/UbuntuSans-variable.woff2'))).digest('hex'), originalFontHash);
   const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.woff2': 'font/woff2', '.svg': 'image/svg+xml', '.png': 'image/png' };
   const server = http.createServer(async (request, response) => {
     const pathname = new URL(request.url, 'http://localhost').pathname;
@@ -40,10 +43,17 @@ async function main() {
     const ready = () => page.evaluate(() => CardRenderer.ready(document.getElementById('card')));
     const png = () => page.locator('#card').evaluate(canvas => canvas.toDataURL('image/png'));
 
-    for (const [example, fixture] of [['Básquet', 'source-basketball.png'], ['Ganada', 'source-won.png']]) {
+    for (const [example, fixture] of [['Básquet', 'original-basketball.html'], ['Ganada', 'original-won.html']]) {
       await page.locator(`[data-example="${example}"]`).click();
       await ready();
-      const reference = await fs.readFile(path.join(project, 'tests/fixtures', fixture));
+      // Render the frozen original HTML/CSS in the same OS and browser. Font
+      // hinting differs across systems; the reference must use the same rasterizer.
+      const original = await browser.newPage({ viewport: { width: 800, height: 700 } });
+      await original.goto(`${url}_references/${fixture}`);
+      await original.evaluate(() => document.fonts.ready);
+      await original.waitForTimeout(250);
+      const reference = await original.locator('.share-bet-modal__body').screenshot();
+      await original.close();
       const diff = await page.evaluate(async source => {
         const image = new Image(); image.src = source; await image.decode();
         const reference = document.createElement('canvas'); reference.width = 450; reference.height = 338;
