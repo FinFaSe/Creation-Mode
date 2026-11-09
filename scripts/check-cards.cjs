@@ -118,4 +118,11 @@ async function main() {
     await fs.rm(temp, { recursive: true, force: true });
   }
 }
-main().catch(error => { console.error(error); process.exitCode = 1; });
+main().catch(error => {
+  console.error(error);
+  if (process.env.GITHUB_ACTIONS) {
+    const message = String(error.message).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+    console.error(`::error title=Card browser validation::${message}`);
+  }
+  process.exitCode = 1;
+});
