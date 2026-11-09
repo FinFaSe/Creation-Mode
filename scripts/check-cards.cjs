@@ -65,7 +65,6 @@ async function main() {
       // Tolerate rasterizer anti-aliasing, while detecting font, spacing and color regressions.
       if (!(diff.rmse < 3 && diff.significant < 0.001)) {
         const failure = new Error(`${example} differs from the original CSS reference: ${JSON.stringify(diff)}; browser=${browser.version()}`);
-        failure.cardPreview = await png();
         throw failure;
       }
       const preview = await png();
@@ -127,10 +126,6 @@ main().catch(error => {
   if (process.env.GITHUB_ACTIONS) {
     const message = String(error.message).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
     console.error(`::error title=Card browser validation::${message}`);
-    if (error.cardPreview) {
-      const chunks = error.cardPreview.match(/.{1,3000}/g);
-      chunks.forEach((chunk, index) => console.error(`::notice title=Public card diagnostic ${index + 1} of ${chunks.length}::CARD_PART_${index + 1}=${chunk}`));
-    }
   }
   process.exitCode = 1;
 });

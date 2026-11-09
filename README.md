@@ -52,3 +52,5 @@ npm run test:browser
 Si Chromium ya está instalado, se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/ruta/a/chromium npm run test:browser`.
 
 El script prueba el sitio estático bajo `/Creation-Mode/`, sin conexiones externas. Compara los ejemplos de básquet y apuesta ganada con capturas del HTML y CSS originales, con tolerancia pequeña para diferencias de antialiasing. Comprueba que el PNG descargado coincide con la vista previa, los 36 casos de mercado/estado, marcador cero, validación de campos, cálculo de retorno sin alterar la tarjeta, orden de renderización, texto escapado, vista móvil de 390 y 320 px y errores de carga de fuente. Estas pruebas también se ejecutan antes de publicar en GitHub Actions.
+
+Playwright está fijado en 1.64.0 para usar Chromium 156, la misma rama con la que se generaron las referencias visuales. El tamaño raíz original de 14px se resuelve antes de insertar el CSS en el SVG para mantener las unidades `rem` consistentes.
