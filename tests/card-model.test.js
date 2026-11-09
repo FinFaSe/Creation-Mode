@@ -24,6 +24,24 @@ test('basketball reference places the player in brackets in the market only', ()
   assert.equal(card.odds, '1.83');
 });
 
+test('first-half basketball references match the supplied point and handicap cards', () => {
+  const values = { ...base, sport: 'Básquet', home: 'Phoenix Suns', away: 'San Antonio Spurs', time: 'Esta noche 21:00' };
+  const total = makeCardData({ ...values, market: 'Primer Tiempo - Total de Puntos', selection: 'Más de', line: '117.5', odds: '1.87' });
+  assert.equal(total.market, 'Primer Tiempo - Total de Puntos');
+  assert.equal(total.selection, 'Más de 117.5');
+  assert.equal(total.odds, '1.87');
+  const handicap = makeCardData({ ...values, market: 'Primer Tiempo - Hándicap', selection: 'home', line: '3.5', odds: '2.12' });
+  assert.equal(handicap.market, 'Primer Tiempo - Hándicap');
+  assert.equal(handicap.selection, 'Phoenix Suns +3.5');
+  assert.equal(handicap.odds, '2.12');
+  assert.equal(makeCardData({ ...values, market: 'Primer Tiempo - Hándicap', selection: 'away', line: '-3.5' }).selection, 'San Antonio Spurs -3.5');
+});
+
+test('legacy first-half market names use the exact first-half labels', () => {
+  assert.equal(makeCardData({ ...base, market: 'Primer tiempo Hándicap' }).market, 'Primer Tiempo - Hándicap');
+  assert.equal(makeCardData({ ...base, market: 'Primer tiempo Total de puntos' }).market, 'Primer Tiempo - Total de Puntos');
+});
+
 test('winning reference keeps the odds, a manual result and the final score', () => {
   const card = makeCardData({ ...base, home: 'RB Leipzig', away: 'FC Augsburg', market: 'Remates totales',
     selection: 'Menos de', line: '33.5', odds: '1.72', result: 'won', homeScore: '5', awayScore: '2' });

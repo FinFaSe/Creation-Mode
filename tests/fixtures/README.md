@@ -18,3 +18,7 @@ excluded. These fixtures are used only by tests and are not published to Pages.
 original-live.html uses the existing public basketball example with manual sample
 scores and clock. Its scoreboard structure and styles follow the public Vue
 component and CSS in the live HAR; the lightning icon is a local vector.
+
+The two first-half references use the new user-provided point and handicap
+examples. The Phoenix Suns and San Antonio Spurs badge data comes unchanged
+from image resources in the earlier HAR, embedded locally as data URLs.

@@ -86,7 +86,11 @@ function setSport(value) {
 }
 
 function example(value) {
-  const basketball = value === 'Básquet' || value === 'En vivo';
+  const firstHalf = {
+    '1T Puntos': { market: 'Primer Tiempo - Total de Puntos', line: '117.5', odds: '1.87', selection: 'Más de' },
+    '1T Hándicap': { market: 'Primer Tiempo - Hándicap', line: '3.5', odds: '2.12', selection: 'home' }
+  }[value];
+  const basketball = value === 'Básquet' || value === 'En vivo' || !!firstHalf;
   $('home').value = basketball ? 'Phoenix Suns' : 'CD Tecnico Universitario';
   $('away').value = basketball ? 'San Antonio Spurs' : 'Manta FC';
   $('odds').value = basketball ? '1.83' : '2.02';
@@ -99,6 +103,13 @@ function example(value) {
   refreshSelection();
   $('selection').value = basketball ? 'Más de' : 'Sí';
   $('result').value = value === 'Ganada' ? 'won' : value === 'En vivo' ? 'live' : 'pending';
+  if (firstHalf) {
+    $('market').value = firstHalf.market;
+    $('line').value = firstHalf.line;
+    $('odds').value = firstHalf.odds;
+    refreshSelection();
+    $('selection').value = firstHalf.selection;
+  }
   if (value === 'En vivo') {
     $('home-score').value = '98';
     $('away-score').value = '95';

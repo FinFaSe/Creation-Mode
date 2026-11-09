@@ -9,8 +9,8 @@
     'Corners en primer tiempo Más/Menos': 'Total de Córners - 1.er tiempo',
     'Hándicap de corners': 'Hándicap de Córners',
     'Total de puntos': 'Total de Puntos',
-    'Primer tiempo Hándicap': 'Hándicap - 1.er tiempo',
-    'Primer tiempo Total de puntos': 'Total de Puntos - 1.er tiempo',
+    'Primer tiempo Hándicap': 'Primer Tiempo - Hándicap',
+    'Primer tiempo Total de puntos': 'Primer Tiempo - Total de Puntos',
     'Total': 'Total de Carreras'
   };
 

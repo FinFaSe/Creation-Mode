@@ -68,7 +68,10 @@ async function main() {
     assert.ok(detailDifference > 1, 'High resolution must re-render text rather than enlarge the low-resolution PNG');
     assert.equal((await page.locator('#card').boundingBox()).width, previewSize.width);
 
-    for (const [example, fixture] of [['Básquet', 'original-basketball.html'], ['En vivo', 'original-live.html'], ['Ganada', 'original-won.html']]) {
+    for (const [example, fixture] of [
+      ['Básquet', 'original-basketball.html'], ['1T Puntos', 'original-first-half-points.html'],
+      ['1T Hándicap', 'original-first-half-handicap.html'], ['En vivo', 'original-live.html'], ['Ganada', 'original-won.html']
+    ]) {
       await page.selectOption('#quality', '1');
       await page.locator(`[data-example="${example}"]`).click();
       await ready();

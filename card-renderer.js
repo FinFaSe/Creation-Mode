@@ -14,7 +14,7 @@
       return response[type]();
     }
     const [design, font] = await Promise.all([
-      resource('./assets/card-design.json?v=live-1', 'json'),
+      resource('./assets/card-design.json?v=first-half-1', 'json'),
       resource('./assets/fonts/UbuntuSans-variable.woff2', 'blob')
     ]);
     const fontUrl = await new Promise((resolve, reject) => {
@@ -59,6 +59,18 @@
     const teams = context.querySelectorAll('.participants__participant-name');
     teams[0].textContent = data.home;
     teams[1].textContent = data.away;
+    if (data.sport === 'Básquet' && data.market.startsWith('Primer Tiempo - ')) {
+      const badges = [data.home, data.away].map(name => design.teamLogos?.[name.trim().toLowerCase().replace(/\s+/g, ' ')]);
+      if (badges.every(Boolean)) {
+        teams.forEach((team, index) => {
+          const image = document.createElement('img');
+          image.src = badges[index]; image.width = 16; image.height = 16;
+          image.alt = index === 0 ? data.home : data.away;
+          image.setAttribute('data-team-logo', '');
+          team.parentElement.prepend(image);
+        });
+      }
+    }
     if (won) set('[data-qa="final-score"] span', `Marcador ${data.score}`);
     else if (live) {
       set('[data-qa="live-home-score"]', data.live.homeScore);
