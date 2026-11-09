@@ -36,7 +36,9 @@ function draw() {
       .map(id => [id, $(id).value])),
     result: $('result').value, homeScore: $('home-score').value, awayScore: $('away-score').value
   });
-  const painting = assets ? CardRenderer.render(canvas, data, assets) : Promise.resolve(false);
+  const scale = Number($('quality').value);
+  $('export-size').textContent = `PNG · ${CardRenderer.WIDTH * scale} × ${CardRenderer.HEIGHT * scale}`;
+  const painting = assets ? CardRenderer.render(canvas, data, assets, scale) : Promise.resolve(false);
   const outcome = data.result === 'won' ? `Ganada. Marcador ${data.score}` : data.time;
   canvas.setAttribute('aria-label', `${data.home} contra ${data.away}. ${data.market}: ${data.selection}. Cuota ${data.odds}. ${outcome}`);
   const stake = Number($('stake').value);
@@ -111,6 +113,7 @@ document.querySelectorAll('[data-sport]').forEach(button => button.addEventListe
 document.querySelectorAll('[data-example]').forEach(button => button.addEventListener('click', () => example(button.dataset.example)));
 $('market').addEventListener('change', () => { refreshSelection(); draw(); });
 $('result').addEventListener('change', () => { refreshResult(); draw(); });
+$('quality').addEventListener('change', () => { $('status').textContent = ''; draw(); });
 ['home', 'away'].forEach(id => $(id).addEventListener('input', () => { refreshSelection(); draw(); }));
 $('editor').addEventListener('input', () => { $('status').textContent = ''; draw(); });
 $('editor').addEventListener('submit', event => event.preventDefault());
@@ -122,13 +125,14 @@ $('download').addEventListener('click', async () => {
   try {
     if (!await draw()) return;
     await CardRenderer.ready(canvas);
+    const { width, height } = canvas;
     canvas.toBlob(blob => {
       if (!blob) { $('status').textContent = 'No se pudo generar la imagen. Inténtalo otra vez.'; return; }
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.download = 'mi-jugada.png'; link.href = url; link.click();
       setTimeout(() => URL.revokeObjectURL(url), 10000);
-      $('status').textContent = 'Tarjeta descargada · 450 × 338 px.';
+      $('status').textContent = `Tarjeta descargada · ${width} × ${height} px.`;
     }, 'image/png');
   } catch (error) {
     $('status').textContent = 'No se pudo descargar la tarjeta. Inténtalo otra vez.';

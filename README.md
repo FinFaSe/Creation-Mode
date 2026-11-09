@@ -1,6 +1,6 @@
 # Creation Mode
 
-Creador de tarjetas de cuotas en español, inspirado en el formato visual de Betano. Permite editar equipos, mercado, selección, línea, cuota y horario; muestra una vista previa y exporta un PNG de 450 × 338. El monto opcional calcula el retorno potencial, incluyendo la apuesta inicial, sin añadirlo a la imagen.
+Creador de tarjetas de cuotas en español, inspirado en el formato visual de Betano. Permite editar equipos, mercado, selección, línea, cuota y horario; muestra una vista previa y exporta un PNG de alta resolución. El monto opcional calcula el retorno potencial, incluyendo la apuesta inicial, sin añadirlo a la imagen.
 
 ## Ejecutar
 
@@ -31,7 +31,9 @@ El fondo, el logo PNG y los SVG de básquet, fútbol, acierto y marcador se extr
 
 `assets/card-design.json` contiene únicamente plantillas saneadas de los dos ejemplos públicos, sus reglas visuales, variables resueltas e iconos. No contiene el HAR, cabeceras, datos de sesión ni respuestas de la cuenta. Los datos editables se insertan con `textContent`.
 
-La exportación aplica las reglas originales dentro de un SVG aislado con la fuente embebida y lo dibuja en el canvas de 450 × 338. No necesita servicios externos. Un control de revisiones evita que una renderización anterior sustituya a una edición más reciente; la descarga espera a que termine la tarjeta actual.
+La exportación aplica las reglas originales dentro de un SVG aislado con la fuente embebida. El diseño mantiene su tamaño lógico de 450 × 338 y se rasteriza directamente a la calidad elegida: 1× (450 × 338), 2× (900 × 676) o 4× (1800 × 1352, predeterminada). El texto y los iconos vectoriales se renderizan a la resolución final; el logo y el fondo conservan sus recursos PNG originales. La vista previa mantiene el mismo tamaño en pantalla.
+
+No necesita servicios externos. Un control de revisiones evita que una renderización anterior sustituya a una edición más reciente; la descarga espera a que termine la tarjeta actual.
 
 Ubuntu Sans pertenece a Canonical Ltd. y se distribuye sin modificaciones bajo Ubuntu Font Licence 1.0; se incluyen la licencia y los créditos en `assets/fonts/`. La fuente de marca decorativa y los recursos de otras secciones del sitio no se incorporan.
 
@@ -52,5 +54,7 @@ npm run test:browser
 Si Chromium ya está instalado, se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/ruta/a/chromium npm run test:browser`.
 
 El script prueba el sitio estático bajo `/Creation-Mode/`, sin conexiones externas. Compara los ejemplos de básquet y apuesta ganada con el HTML y CSS originales guardados como referencias independientes. Renderiza esas referencias en el mismo navegador y sistema operativo que la exportación y aplica una tolerancia pequeña de antialiasing. Comprueba también el checksum de la fuente original. Comprueba que el PNG descargado coincide con la vista previa, los 36 casos de mercado/estado, marcador cero, validación de campos, cálculo de retorno sin alterar la tarjeta, orden de renderización, texto escapado, vista móvil de 390 y 320 px y errores de carga de fuente. Estas pruebas también se ejecutan antes de publicar en GitHub Actions.
+
+La prueba de calidad verifica el valor 4× predeterminado, las dimensiones codificadas en los PNG 1×/2×/4×, el tamaño constante de la vista previa y el detalle del texto de alta resolución frente a ampliar una imagen de baja resolución.
 
 Playwright está fijado en 1.64.0 para usar Chromium 156. Las referencias se renderizan durante la prueba para controlar las diferencias de tipografía entre sistemas operativos. El tamaño raíz original de 14px se resuelve antes de insertar el CSS en el SVG para mantener las unidades `rem` consistentes.

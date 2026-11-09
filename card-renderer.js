@@ -4,6 +4,7 @@
 (function (root) {
   const WIDTH = 450;
   const HEIGHT = 338;
+  const DEFAULT_SCALE = 4;
   const jobs = new WeakMap();
 
   async function loadAssets() {
@@ -25,7 +26,7 @@
     return { design, fontUrl };
   }
 
-  function svg(data, assets) {
+  function svg(data, assets, scale) {
     const { design, fontUrl } = assets;
     const won = data.result === 'won';
     const wrapper = document.createElement('div');
@@ -63,18 +64,20 @@
     sport.innerHTML = design.icons[data.sport];
     context.querySelector('[data-qa="sport-icon"]').replaceWith(sport.content.cloneNode(true));
     const html = new XMLSerializer().serializeToString(wrapper);
-    return `<svg xmlns="http://www.w3.org/2000/svg" style="font-size:14px" width="${WIDTH}" height="${HEIGHT}"><foreignObject width="${WIDTH}" height="${HEIGHT}">${html}</foreignObject></svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" style="font-size:14px" width="${WIDTH * scale}" height="${HEIGHT * scale}" viewBox="0 0 ${WIDTH} ${HEIGHT}"><foreignObject width="${WIDTH}" height="${HEIGHT}">${html}</foreignObject></svg>`;
   }
 
-  function render(canvas, data, assets) {
+  function render(canvas, data, assets, scale = DEFAULT_SCALE) {
+    scale = [1, 2, 4].includes(Number(scale)) ? Number(scale) : DEFAULT_SCALE;
     const revision = (jobs.get(canvas)?.revision || 0) + 1;
     const image = new Image();
     const promise = new Promise((resolve, reject) => {
       image.onload = () => {
         if (jobs.get(canvas)?.revision !== revision) { resolve(false); return; }
         try {
+          canvas.width = WIDTH * scale;
+          canvas.height = HEIGHT * scale;
           const ctx = canvas.getContext('2d');
-          ctx.clearRect(0, 0, WIDTH, HEIGHT);
           ctx.drawImage(image, 0, 0);
           resolve(true);
         } catch (error) { reject(error); }
@@ -82,7 +85,7 @@
       image.onerror = () => reject(new Error('No se pudo generar la tarjeta.'));
     });
     jobs.set(canvas, { revision, promise });
-    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg(data, assets))}`;
+    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg(data, assets, scale))}`;
     return promise;
   }
 
@@ -91,5 +94,5 @@
     do { job = jobs.get(canvas); await job?.promise; } while (job !== jobs.get(canvas));
   }
 
-  root.CardRenderer = { WIDTH, HEIGHT, loadAssets, render, ready };
+  root.CardRenderer = { WIDTH, HEIGHT, DEFAULT_SCALE, loadAssets, render, ready };
 })(window);

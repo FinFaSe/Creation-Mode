@@ -42,8 +42,34 @@ async function main() {
     await page.waitForFunction(() => !document.getElementById('download').disabled);
     const ready = () => page.evaluate(() => CardRenderer.ready(document.getElementById('card')));
     const png = () => page.locator('#card').evaluate(canvas => canvas.toDataURL('image/png'));
+    assert.equal(await page.inputValue('#quality'), '4');
+    assert.deepEqual(await page.locator('#card').evaluate(c => [c.width, c.height]), [1800, 1352]);
+    const highResolution = await png();
+    const previewSize = await page.locator('#card').boundingBox();
+    await page.selectOption('#quality', '1'); await ready();
+    const lowResolution = await png();
+    const detailDifference = await page.evaluate(async ({ high, low }) => {
+      const images = await Promise.all([high, low].map(async src => {
+        const image = new Image(); image.src = src; await image.decode(); return image;
+      }));
+      const canvas = document.createElement('canvas'); canvas.width = 1800; canvas.height = 1352;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(images[0], 0, 0);
+      const native = ctx.getImageData(240, 560, 1200, 240).data;
+      ctx.clearRect(0, 0, 1800, 1352);
+      ctx.drawImage(images[1], 0, 0, 1800, 1352);
+      const enlarged = ctx.getImageData(240, 560, 1200, 240).data;
+      let difference = 0;
+      for (let i = 0; i < native.length; i += 4) {
+        for (let channel = 0; channel < 3; channel++) difference += Math.abs(native[i + channel] - enlarged[i + channel]);
+      }
+      return difference / (1200 * 240 * 3);
+    }, { high: highResolution, low: lowResolution });
+    assert.ok(detailDifference > 1, 'High resolution must re-render text rather than enlarge the low-resolution PNG');
+    assert.equal((await page.locator('#card').boundingBox()).width, previewSize.width);
 
     for (const [example, fixture] of [['Básquet', 'original-basketball.html'], ['Ganada', 'original-won.html']]) {
+      await page.selectOption('#quality', '1');
       await page.locator(`[data-example="${example}"]`).click();
       await ready();
       // Render the frozen original HTML/CSS in the same OS and browser. Font
@@ -82,6 +108,16 @@ async function main() {
       const file = await (await download).path();
       assert.deepEqual(await fs.readFile(file), Buffer.from(preview.split(',')[1], 'base64'));
       assert.deepEqual(await page.locator('#card').evaluate(c => [c.width, c.height]), [450, 338]);
+      for (const scale of [2, 4]) {
+        await page.selectOption('#quality', String(scale)); await ready();
+        const preview = await png();
+        const download = page.waitForEvent('download'); await page.click('#download');
+        const image = await fs.readFile(await (await download).path());
+        assert.deepEqual(image, Buffer.from(preview.split(',')[1], 'base64'));
+        assert.equal(image.readUInt32BE(16), 450 * scale);
+        assert.equal(image.readUInt32BE(20), 338 * scale);
+        assert.equal((await page.locator('#card').boundingBox()).width, previewSize.width);
+      }
       console.log(`${example}: original visual reference and PNG download passed (RMSE ${diff.rmse.toFixed(3)})`);
     }
 
