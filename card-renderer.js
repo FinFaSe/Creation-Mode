@@ -31,10 +31,14 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'capture-root';
     const styles = document.createElement('style');
+    // The source site's rem unit is 14px. Resolve it before embedding, since an
+    // SVG image can otherwise inherit the browser's default root font size.
+    const css = design.css.replace(/(\d*\.?\d+)rem\b/g,
+      (_match, value) => `${Math.round(Number(value) * 14 * 10000) / 10000}px`);
     styles.textContent = `
       @font-face{font-family:'Ubuntu Sans';src:url('${fontUrl}') format('woff2');font-weight:100 800;font-stretch:75% 100%}
       .capture-root{width:450px;height:338px;overflow:hidden;${Object.entries(design.variables).map(([name, value]) => `${name}:${value};`).join('')}}
-      ${design.css}
+      ${css}
       .capture-root .kaizen-betting{width:360px;zoom:1.25;font:450 14px/1 'Ubuntu Sans',sans-serif}
       .capture-root .share-bet-modal__body{min-height:270.4px}
     `;

@@ -127,7 +127,10 @@ main().catch(error => {
   if (process.env.GITHUB_ACTIONS) {
     const message = String(error.message).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
     console.error(`::error title=Card browser validation::${message}`);
-    if (error.cardPreview) console.error(`::notice title=Public example rendering diagnostic::${error.cardPreview}`);
+    if (error.cardPreview) {
+      const chunks = error.cardPreview.match(/.{1,3000}/g);
+      chunks.forEach((chunk, index) => console.error(`::notice title=Public card diagnostic ${index + 1} of ${chunks.length}::CARD_PART_${index + 1}=${chunk}`));
+    }
   }
   process.exitCode = 1;
 });
