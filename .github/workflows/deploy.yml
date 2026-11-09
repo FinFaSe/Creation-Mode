@@ -31,10 +31,14 @@ jobs:
           node --check app.js
           node --check markets.js
           node --check server.js
+          node --check card-model.js
+          node --check card-renderer.js
+          npm test
       - name: Preparar sitio estático
         run: |
           mkdir -p _site
-          cp index.html styles.css app.js markets.js _site/
+          cp index.html styles.css app.js markets.js card-model.js card-renderer.js _site/
+          cp -R assets _site/assets
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

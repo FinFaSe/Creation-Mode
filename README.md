@@ -1,6 +1,6 @@
 # Creation Mode
 
-Creador de tarjetas de cuotas en español, inspirado en el formato visual de Betano. Permite editar equipos, mercado, selección, línea, cuota y horario; muestra una vista previa y exporta un PNG de 1184 × 870. El monto opcional calcula el retorno potencial, incluyendo la apuesta inicial.
+Creador de tarjetas de cuotas en español, inspirado en el formato visual de Betano. Permite editar equipos, mercado, selección, línea, cuota y horario; muestra una vista previa y exporta un PNG de 450 × 338. El monto opcional calcula el retorno potencial, incluyendo la apuesta inicial, sin añadirlo a la imagen.
 
 ## Ejecutar
 
@@ -19,8 +19,20 @@ El servidor usa el puerto 3000; se puede cambiar con la variable `PORT`.
 - Básquet: ganador, puntos, hándicap, estadísticas de jugador Más/Menos, hándicap primer tiempo y puntos primer tiempo.
 - Béisbol: ganador, hándicap y total.
 
-Los equipos y jugadores se escriben manualmente. Las cuotas son manuales: no hay conexión con Betano, resultados en vivo ni procesamiento de apuestas. Cada imagen lleva una indicación de muestra. Los datos se mantienen solo durante la sesión de la página.
+Los equipos y jugadores se escriben manualmente. Las cuotas son manuales: no hay conexión con Betano, resultados en vivo ni procesamiento de apuestas. El aviso de muestra se muestra en el editor. Los datos se mantienen solo durante la sesión de la página.
+
+## Diseño de referencia
+
+Los botones «Cargar ejemplo» reproducen los datos de las capturas de fútbol y básquet. En los mercados de jugador, el nombre se muestra entre corchetes dentro del mercado: `Total de Puntos [Victor Wembanyama]`; la selección queda como `Más de 28.5`.
+
+El fondo, el logo PNG y el SVG de básquet se extrajeron del HTML aportado por el usuario. Los iconos de fútbol y béisbol se dibujaron como SVG locales. El HTML no incluía hojas de estilo ni fuentes originales: las posiciones y tamaños se reconstruyeron a partir de las capturas y la tipografía se aproxima con Open Sans. No se ha verificado una coincidencia exacta píxel a píxel.
+
+Todos los recursos de la tarjeta se sirven localmente, incluidas las fuentes, para que la descarga no dependa de servidores externos. Open Sans es de Google Corporation y se distribuye bajo Apache 2.0; la licencia se incluye en `assets/fonts/LICENSE.txt`.
+
+GitHub Actions publica los archivos estáticos y la carpeta `assets/` en GitHub Pages con cada envío a `main`.
 
 ## Validación realizada
 
-Prueba de navegador con Chromium: selección de los 18 mercados, controles de jugador, cálculo de retorno, descarga PNG y diseño móvil de 390 px sin desbordamiento. Comprobación de sintaxis de JavaScript con Node.js.
+`npm test` ejecuta cinco pruebas del modelo: los dos ejemplos, hándicaps con signos y equipos renombrados, entradas inválidas y los 18 mercados.
+
+Prueba de navegador con Chromium sobre una compilación estática bajo `/Creation-Mode/`: ambos ejemplos, fuentes e imágenes locales, selección de los 18 mercados, validación de jugador/cuota, cálculo de retorno sin modificar la imagen, descarga PNG idéntica a la vista previa de 450 × 338, textos largos y diseño móvil de 390 y 320 px sin desbordamiento. También se comprobó el mensaje de error y bloqueo de descarga cuando falla un recurso. Comprobación de sintaxis de JavaScript con Node.js.

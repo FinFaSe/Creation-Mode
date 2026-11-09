@@ -3,6 +3,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = __dirname;
 const publicFiles = { '/': ['index.html', 'text/html'], '/app.js': ['app.js', 'text/javascript'], '/styles.css': ['styles.css', 'text/css'], '/markets.js': ['markets.js', 'text/javascript'] };
+for (const name of ['card-model.js', 'card-renderer.js']) publicFiles[`/${name}`] = [name, 'text/javascript'];
+for (const name of ['football.svg', 'basketball.svg', 'baseball.svg']) publicFiles[`/assets/${name}`] = [`assets/${name}`, 'image/svg+xml'];
+for (const name of ['share-background.png', 'betano-logo.png']) publicFiles[`/assets/${name}`] = [`assets/${name}`, 'image/png'];
+for (const name of ['OpenSans-Regular.ttf', 'OpenSans-Bold.ttf']) publicFiles[`/assets/fonts/${name}`] = [`assets/fonts/${name}`, 'font/ttf'];
 http.createServer((req, res) => {
   const file = publicFiles[new URL(req.url, 'http://localhost').pathname];
   if (!file) { res.writeHead(404); res.end('No encontrado'); return; }
