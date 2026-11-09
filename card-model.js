@@ -5,7 +5,7 @@
     'Más/Menos corners': 'Total de Córners',
     'Total de tarjetas': 'Total de Tarjetas',
     'Tiros al arco': 'Tiros al Arco',
-    'Remates totales': 'Remates Totales',
+    'Remates totales': 'Remates totales',
     'Corners en primer tiempo Más/Menos': 'Total de Córners - 1.er tiempo',
     'Hándicap de corners': 'Hándicap de Córners',
     'Total de puntos': 'Total de Puntos',
@@ -40,9 +40,13 @@
       ? `Total de ${values.stat} [${values.player.trim() || 'Jugador'}]`
       : marketLabels[values.market] || values.market;
     const odds = Number(values.odds);
+    const result = values.result === 'won' ? 'won' : 'pending';
+    const score = value => /^\d{1,3}$/.test(String(value)) ? String(Number(value)) : '—';
     return {
       sport: values.sport, home, away, selection, market,
       time: values.time.trim(),
+      result,
+      score: result === 'won' ? `${score(values.homeScore)}-${score(values.awayScore)}` : '',
       odds: Number.isFinite(odds) && odds >= 1.01 && odds <= 9999 ? odds.toFixed(2) : '—'
     };
   }

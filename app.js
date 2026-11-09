@@ -33,14 +33,27 @@ function refreshSelection() {
 function draw() {
   const data = CardModel.makeCardData({
     sport, ...Object.fromEntries(['home', 'away', 'market', 'selection', 'line', 'player', 'stat', 'odds', 'time']
-      .map(id => [id, $(id).value]))
+      .map(id => [id, $(id).value])),
+    result: $('result').value, homeScore: $('home-score').value, awayScore: $('away-score').value
   });
   if (assets) CardRenderer.render(canvas, data, assets);
-  canvas.setAttribute('aria-label', `${data.home} contra ${data.away}. ${data.market}: ${data.selection}. Cuota ${data.odds}. ${data.time}`);
+  const outcome = data.result === 'won' ? `Ganada. Marcador ${data.score}` : data.time;
+  canvas.setAttribute('aria-label', `${data.home} contra ${data.away}. ${data.market}: ${data.selection}. Cuota ${data.odds}. ${outcome}`);
   const stake = Number($('stake').value);
   const odds = Number($('odds').value);
   $('return').textContent = stake > 0 && data.odds !== '—'
     ? (stake * odds).toLocaleString('es-CO', { style: 'currency', currency: $('currency').value }) : '—';
+}
+
+function refreshResult() {
+  const won = $('result').value === 'won';
+  $('score-fields').hidden = !won;
+  for (const id of ['home-score', 'away-score']) {
+    $(id).required = won;
+    $(id).disabled = !won;
+  }
+  $('time-label').hidden = won;
+  $('time').disabled = won;
 }
 
 function setSport(value) {
@@ -62,10 +75,23 @@ function example(value) {
   $('player').value = 'Victor Wembanyama';
   $('stat').value = 'Puntos';
   $('line').value = basketball ? '28.5' : '2.5';
-  setSport(value);
+  setSport(basketball ? 'Básquet' : 'Fútbol');
   $('market').value = basketball ? 'Jugador · Más/Menos' : 'Ambos equipos anotan';
   refreshSelection();
   $('selection').value = basketball ? 'Más de' : 'Sí';
+  $('result').value = value === 'Ganada' ? 'won' : 'pending';
+  if (value === 'Ganada') {
+    $('home').value = 'RB Leipzig';
+    $('away').value = 'FC Augsburg';
+    $('odds').value = '1.72';
+    $('market').value = 'Remates totales';
+    $('line').value = '33.5';
+    refreshSelection();
+    $('selection').value = 'Menos de';
+    $('home-score').value = '5';
+    $('away-score').value = '2';
+  }
+  refreshResult();
   $('status').textContent = '';
   draw();
 }
@@ -75,6 +101,7 @@ document.querySelectorAll('[data-sport]').forEach(button => button.addEventListe
 }));
 document.querySelectorAll('[data-example]').forEach(button => button.addEventListener('click', () => example(button.dataset.example)));
 $('market').addEventListener('change', () => { refreshSelection(); draw(); });
+$('result').addEventListener('change', () => { refreshResult(); draw(); });
 ['home', 'away'].forEach(id => $(id).addEventListener('input', () => { refreshSelection(); draw(); }));
 $('editor').addEventListener('input', () => { $('status').textContent = ''; draw(); });
 $('editor').addEventListener('submit', event => event.preventDefault());

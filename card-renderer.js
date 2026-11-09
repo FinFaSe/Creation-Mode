@@ -13,12 +13,13 @@
         img.src = new URL(path, document.baseURI).href;
       });
     }
-    const [background, logo, football, basketball, baseball] = await Promise.all([
+    const [background, logo, football, basketball, baseball, success, score] = await Promise.all([
       image('./assets/share-background.png'), image('./assets/betano-logo.png'),
       image('./assets/football.svg'), image('./assets/basketball.svg'), image('./assets/baseball.svg'),
+      image('./assets/success.svg'), image('./assets/score.svg'),
       document.fonts.load(`400 14px ${FAMILY}`), document.fonts.load(`700 17px ${FAMILY}`)
     ]);
-    return { background, logo, 'Fútbol': football, 'Básquet': basketball, 'Béisbol': baseball };
+    return { background, logo, 'Fútbol': football, 'Básquet': basketball, 'Béisbol': baseball, success, score };
   }
 
   function render(canvas, data, assets) {
@@ -69,14 +70,16 @@
     }
 
     // Logical dimensions and positions follow the supplied 450 × 338 references.
+    const won = data.result === 'won';
+    const offset = won ? -6 : 0;
     font(14, true);
     const oddsWidth = Math.max(49, ctx.measureText(data.odds).width + 20);
-    const selection = layout(data.selection, 419 - oddsWidth - 12 - 63, 17, true, 2, 11);
+    const selection = layout(data.selection, 419 - oddsWidth - 12 - 63 - (won ? 24 : 0), 17, true, 2, 11);
     const market = layout(data.market, 355, 16, false, 2, 12);
     const home = layout(data.home, 226, 14.4, false, 2, 10);
     const away = layout(data.away, 226, 14.4, false, 2, 10);
     const selectionExtra = (selection.lines.length - 1) * 22;
-    const marketY = 190 + selectionExtra;
+    const marketY = 190 + selectionExtra + offset;
     const homeY = marketY + (market.lines.length - 1) * 21 + 27;
     const awayY = homeY + (home.lines.length - 1) * 18 + 22;
     const lastY = awayY + (away.lines.length - 1) * 18;
@@ -90,23 +93,47 @@
     ctx.drawImage(assets.logo, 38, 26, 120, 36);
 
     box(20, 79, 410, cardHeight, 16, '#fff');
-    text('Simple', 31, 108, 14, '#1c2026', true);
-    text(data.odds, 419, 108, 14, '#1c2026', true, 'right');
+    text('Simple', 31, won ? 106 : 108, 14, '#1c2026', true);
+    if (won) {
+      box(349.5, 89.5, 74, 23, 12, '#f0fff4');
+      ctx.strokeStyle = '#109e43';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      text('Ganada', 386.5, 106, 14, '#00802c', true, 'center');
+    } else text(data.odds, 419, 108, 14, '#1c2026', true, 'right');
     ctx.strokeStyle = '#e0e4ea';
     ctx.lineWidth = 0.7;
-    ctx.beginPath();ctx.moveTo(20, 128.5);ctx.lineTo(430, 128.5);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(20, 128.5 + offset);ctx.lineTo(430, 128.5 + offset);ctx.stroke();
 
-    ctx.drawImage(assets[data.sport], 31, 141, 26, 26);
-    drawLines(selection, 63, 160, 22, '#1c2026', true);
-    box(419 - oddsWidth, 139, oddsWidth, 30, 4, '#f6f8f9');
-    text(data.odds, 419 - oddsWidth / 2, 159, 14, '#1c2026', true, 'center');
+    ctx.drawImage(assets[data.sport], 31, 141 + offset, 26, 26);
+    drawLines(selection, 63, 160 + offset, 22, '#1c2026', true);
+    if (won) {
+      font(selection.size, true);
+      const lastLine = selection.lines[selection.lines.length - 1];
+      ctx.drawImage(assets.success, 63 + ctx.measureText(lastLine).width + 5,
+        160 + offset + selectionExtra - 16, 19, 19);
+    }
+    box(419 - oddsWidth, 139 + offset, oddsWidth, 30, 4, '#f6f8f9');
+    text(data.odds, 419 - oddsWidth / 2, 159 + offset, 14, '#1c2026', true, 'center');
 
     drawLines(market, 63, marketY, 21, '#58729e');
     drawLines(home, 63, homeY, 18, '#1c2026');
     drawLines(away, 63, awayY, 18, '#1c2026');
-    const time = layout(data.time, 126, 14.4, false, 2, 10);
-    const timeY = (homeY + lastY) / 2 - (time.lines.length - 1) * 8;
-    time.lines.forEach((line, i) => text(line, 419, timeY + i * 16, time.size, '#657fb0', false, 'right'));
+    if (won) {
+      const label = `Marcador ${data.score}`;
+      let scoreFont = 13;
+      font(scoreFont);
+      while (ctx.measureText(label).width > 88 && scoreFont > 10) font(scoreFont -= 0.5);
+      const width = Math.min(126, Math.max(120, ctx.measureText(label).width + 38));
+      const y = (homeY + lastY) / 2 - 18;
+      box(419 - width, y, width, 25, 13, '#e9edfc');
+      ctx.drawImage(assets.score, 429 - width, y + 5, 15, 15);
+      text(label, 447 - width, y + 17, scoreFont, '#2d3745');
+    } else {
+      const time = layout(data.time, 126, 14.4, false, 2, 10);
+      const timeY = (homeY + lastY) / 2 - (time.lines.length - 1) * 8;
+      time.lines.forEach((line, i) => text(line, 419, timeY + i * 16, time.size, '#657fb0', false, 'right'));
+    }
   }
 
   root.CardRenderer = { WIDTH, HEIGHT, loadAssets, render };

@@ -12,7 +12,7 @@ const base = {
 test('football reference has no total line on the yes/no selection', () => {
   assert.deepEqual(makeCardData(base), {
     sport: 'Fútbol', home: 'CD Tecnico Universitario', away: 'Manta FC',
-    selection: 'Sí', market: 'Ambos equipos anotan', odds: '2.02', time: 'Hoy 15:30'
+    selection: 'Sí', market: 'Ambos equipos anotan', odds: '2.02', time: 'Hoy 15:30', result: 'pending', score: ''
   });
 });
 
@@ -22,6 +22,24 @@ test('basketball reference places the player in brackets in the market only', ()
   assert.equal(card.selection, 'Más de 28.5');
   assert.equal(card.market, 'Total de Puntos [Victor Wembanyama]');
   assert.equal(card.odds, '1.83');
+});
+
+test('winning reference keeps the odds, a manual result and the final score', () => {
+  const card = makeCardData({ ...base, home: 'RB Leipzig', away: 'FC Augsburg', market: 'Remates totales',
+    selection: 'Menos de', line: '33.5', odds: '1.72', result: 'won', homeScore: '5', awayScore: '2' });
+  assert.equal(card.selection, 'Menos de 33.5');
+  assert.equal(card.market, 'Remates totales');
+  assert.equal(card.result, 'won');
+  assert.equal(card.odds, '1.72');
+  assert.equal(card.score, '5-2');
+});
+
+test('scores accept zero and reject invalid inputs without inventing a result', () => {
+  assert.equal(makeCardData({ ...base, result: 'won', homeScore: '0', awayScore: '02' }).score, '0-2');
+  for (const homeScore of ['', '-1', '1.5', '1000', 'NaN']) {
+    assert.equal(makeCardData({ ...base, result: 'won', homeScore, awayScore: '2' }).score, '—-2');
+  }
+  assert.equal(makeCardData({ ...base, homeScore: '5', awayScore: '2' }).result, 'pending');
 });
 
 test('handicap preserves the selected team after a rename and formats the sign', () => {
