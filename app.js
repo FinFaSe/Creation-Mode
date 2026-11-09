@@ -34,12 +34,15 @@ function draw() {
   const data = CardModel.makeCardData({
     sport, ...Object.fromEntries(['home', 'away', 'market', 'selection', 'line', 'player', 'stat', 'odds', 'time']
       .map(id => [id, $(id).value])),
-    result: $('result').value, homeScore: $('home-score').value, awayScore: $('away-score').value
+    result: $('result').value, homeScore: $('home-score').value, awayScore: $('away-score').value,
+    livePeriod: $('live-period').value, liveClock: $('live-clock').value, liveExtraTime: $('live-extra').value
   });
   const scale = Number($('quality').value);
   $('export-size').textContent = `PNG · ${CardRenderer.WIDTH * scale} × ${CardRenderer.HEIGHT * scale}`;
   const painting = assets ? CardRenderer.render(canvas, data, assets, scale) : Promise.resolve(false);
-  const outcome = data.result === 'won' ? `Ganada. Marcador ${data.score}` : data.time;
+  const outcome = data.result === 'live'
+    ? `En vivo. ${data.live.period} ${data.live.clock}${data.live.extraTime ? ' +' + data.live.extraTime : ''}. Marcador ${data.score}`
+    : data.result === 'won' ? `Ganada. Marcador ${data.score}` : data.time;
   canvas.setAttribute('aria-label', `${data.home} contra ${data.away}. ${data.market}: ${data.selection}. Cuota ${data.odds}. ${outcome}`);
   const stake = Number($('stake').value);
   const odds = Number($('odds').value);
@@ -57,14 +60,19 @@ function draw() {
 }
 
 function refreshResult() {
-  const won = $('result').value === 'won';
-  $('score-fields').hidden = !won;
+  const result = $('result').value;
+  const hasScore = result !== 'pending';
+  const live = result === 'live';
+  $('score-fields').hidden = !hasScore;
   for (const id of ['home-score', 'away-score']) {
-    $(id).required = won;
-    $(id).disabled = !won;
+    $(id).required = hasScore;
+    $(id).disabled = !hasScore;
   }
-  $('time-label').hidden = won;
-  $('time').disabled = won;
+  $('live-fields').hidden = !live;
+  for (const id of ['live-period', 'live-clock', 'live-extra']) $(id).disabled = !live;
+  $('live-clock').required = live;
+  $('time-label').hidden = hasScore;
+  $('time').disabled = hasScore;
 }
 
 function setSport(value) {
@@ -78,7 +86,7 @@ function setSport(value) {
 }
 
 function example(value) {
-  const basketball = value === 'Básquet';
+  const basketball = value === 'Básquet' || value === 'En vivo';
   $('home').value = basketball ? 'Phoenix Suns' : 'CD Tecnico Universitario';
   $('away').value = basketball ? 'San Antonio Spurs' : 'Manta FC';
   $('odds').value = basketball ? '1.83' : '2.02';
@@ -90,7 +98,14 @@ function example(value) {
   $('market').value = basketball ? 'Jugador · Más/Menos' : 'Ambos equipos anotan';
   refreshSelection();
   $('selection').value = basketball ? 'Más de' : 'Sí';
-  $('result').value = value === 'Ganada' ? 'won' : 'pending';
+  $('result').value = value === 'Ganada' ? 'won' : value === 'En vivo' ? 'live' : 'pending';
+  if (value === 'En vivo') {
+    $('home-score').value = '98';
+    $('away-score').value = '95';
+    $('live-period').value = '4.º C';
+    $('live-clock').value = '03:24';
+    $('live-extra').value = '';
+  }
   if (value === 'Ganada') {
     $('home').value = 'RB Leipzig';
     $('away').value = 'FC Augsburg';

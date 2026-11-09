@@ -14,3 +14,7 @@ tolerances. font.sha256 preserves the original HAR font's identity.
 Only the user-provided public example teams, markets and odds are present. The
 HAR, account API responses, request headers and other browsing resources are
 excluded. These fixtures are used only by tests and are not published to Pages.
+
+original-live.html uses the existing public basketball example with manual sample
+scores and clock. Its scoreboard structure and styles follow the public Vue
+component and CSS in the live HAR; the lightning icon is a local vector.

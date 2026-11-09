@@ -14,7 +14,7 @@
       return response[type]();
     }
     const [design, font] = await Promise.all([
-      resource('./assets/card-design.json', 'json'),
+      resource('./assets/card-design.json?v=live-1', 'json'),
       resource('./assets/fonts/UbuntuSans-variable.woff2', 'blob')
     ]);
     const fontUrl = await new Promise((resolve, reject) => {
@@ -29,6 +29,7 @@
   function svg(data, assets, scale) {
     const { design, fontUrl } = assets;
     const won = data.result === 'won';
+    const live = data.result === 'live';
     const wrapper = document.createElement('div');
     wrapper.className = 'capture-root';
     const styles = document.createElement('style');
@@ -47,7 +48,7 @@
     const context = document.createElement('div');
     context.className = 'kaizen-betting share-bet-modal';
     // Only a local, sanitized static template is parsed; editable values use textContent.
-    context.innerHTML = design.templates[won ? 'won' : 'pending'];
+    context.innerHTML = design.templates[live ? 'live' : won ? 'won' : 'pending'];
     wrapper.append(context);
     const set = (selector, value) => {
       context.querySelectorAll(selector).forEach(element => { element.textContent = value; });
@@ -59,6 +60,18 @@
     teams[0].textContent = data.home;
     teams[1].textContent = data.away;
     if (won) set('[data-qa="final-score"] span', `Marcador ${data.score}`);
+    else if (live) {
+      set('[data-qa="live-home-score"]', data.live.homeScore);
+      set('[data-qa="live-away-score"]', data.live.awayScore);
+      set('[data-qa="live-clock"]', data.live.clock);
+      for (const [selector, value] of [
+        ['[data-qa="live-period"]', data.live.period],
+        ['[data-qa="live-extra-time"]', data.live.extraTime ? ` +${data.live.extraTime}` : '']
+      ]) {
+        if (value) set(selector, value);
+        else context.querySelector(selector)?.remove();
+      }
+    }
     else set('[data-qa="bet-event-date-time"]', data.time);
     const sport = document.createElement('template');
     sport.innerHTML = design.icons[data.sport];

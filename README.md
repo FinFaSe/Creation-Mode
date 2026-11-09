@@ -19,13 +19,17 @@ El servidor usa el puerto 3000; se puede cambiar con la variable `PORT`.
 - Básquet: ganador, puntos, hándicap, estadísticas de jugador Más/Menos, hándicap primer tiempo y puntos primer tiempo.
 - Béisbol: ganador, hándicap y total.
 
-Los equipos y jugadores se escriben manualmente. Las cuotas son manuales: no hay conexión con Betano, resultados en vivo ni procesamiento de apuestas. El aviso de muestra se muestra en el editor. Los datos se mantienen solo durante la sesión de la página.
+Los equipos, jugadores, cuotas, marcadores y tiempos se introducen manualmente. La aplicación no consulta datos deportivos ni procesa apuestas. El aviso de muestra se muestra en el editor. Los datos se mantienen solo durante la sesión de la página.
 
 ## Diseño de referencia
 
 Los botones «Cargar ejemplo» reproducen los datos de las capturas de fútbol y básquet. En los mercados de jugador, el nombre se muestra entre corchetes dentro del mercado: `Total de Puntos [Victor Wembanyama]`; la selección queda como `Más de 28.5`.
 
 El estado «Ganada» añade la etiqueta verde, el icono de acierto y el marcador final editable, sustituyendo la fecha/hora. El ejemplo «Ganada» carga RB Leipzig / FC Augsburg, Menos de 33.5 remates totales, cuota 1.72 y marcador 5-2. El estado se elige manualmente; la aplicación no valida resultados deportivos.
+
+El estado «En vivo» muestra el rayo, un periodo opcional, el tiempo de juego, el tiempo añadido opcional y los marcadores de los equipos en dos filas a la derecha. El ejemplo «En vivo» usa los equipos públicos de la captura anterior de básquet, 4.º cuarto, 03:24 y marcador 98-95. Todos estos datos son editables; el reloj no avanza automáticamente. Los campos de tiempo en vivo y marcador se desactivan al cambiar a «Pendiente»; los campos de tiempo en vivo se desactivan en «Ganada».
+
+La estructura del marcador en vivo y sus reglas de estilo se reconstruyeron a partir del componente público incluido en el nuevo HAR. El rayo es un vector local. El HAR completo y las respuestas de la cuenta no se guardan en el repositorio.
 
 El fondo, el logo PNG y los SVG de básquet, fútbol, acierto y marcador se extrajeron del HTML aportado por el usuario. El icono de béisbol se dibujó como SVG local. El HAR posterior permitió recuperar las reglas originales del componente y Ubuntu Sans variable, incluidos los pesos 450 y 750.
 
@@ -41,7 +45,7 @@ GitHub Actions publica los archivos estáticos y la carpeta `assets/` en GitHub 
 
 ## Validación realizada
 
-`npm test` ejecuta siete pruebas del modelo: los tres ejemplos, marcadores válidos e inválidos, hándicaps con signos y equipos renombrados, cuotas inválidas y los 18 mercados.
+`npm test` ejecuta nueve pruebas del modelo: los ejemplos, los campos en vivo, marcadores válidos e inválidos, hándicaps con signos y equipos renombrados, cuotas inválidas y los 18 mercados.
 
 Las pruebas de navegador requieren Node.js 20 o superior y las herramientas de desarrollo:
 
@@ -53,7 +57,7 @@ npm run test:browser
 
 Si Chromium ya está instalado, se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/ruta/a/chromium npm run test:browser`.
 
-El script prueba el sitio estático bajo `/Creation-Mode/`, sin conexiones externas. Compara los ejemplos de básquet y apuesta ganada con el HTML y CSS originales guardados como referencias independientes. Renderiza esas referencias en el mismo navegador y sistema operativo que la exportación y aplica una tolerancia pequeña de antialiasing. Comprueba también el checksum de la fuente original. Comprueba que el PNG descargado coincide con la vista previa, los 36 casos de mercado/estado, marcador cero, validación de campos, cálculo de retorno sin alterar la tarjeta, orden de renderización, texto escapado, vista móvil de 390 y 320 px y errores de carga de fuente. Estas pruebas también se ejecutan antes de publicar en GitHub Actions.
+El script prueba el sitio estático bajo `/Creation-Mode/`, sin conexiones externas. Compara los ejemplos de básquet, en vivo y apuesta ganada con sus referencias independientes de HTML y CSS. Renderiza esas referencias en el mismo navegador y sistema operativo que la exportación y aplica una tolerancia pequeña de antialiasing. Comprueba también el checksum de la fuente original. Comprueba que el PNG descargado coincide con la vista previa, los 54 casos de mercado/estado, marcador cero, periodo opcional, tiempo añadido, validación y desactivación de campos, cálculo de retorno sin alterar la tarjeta, orden de renderización, texto escapado, vista móvil de 390 y 320 px y errores de carga de fuente. Estas pruebas también se ejecutan antes de publicar en GitHub Actions.
 
 La prueba de calidad verifica el valor 4× predeterminado, las dimensiones codificadas en los PNG 1×/2×/4×, el tamaño constante de la vista previa y el detalle del texto de alta resolución frente a ampliar una imagen de baja resolución.
 

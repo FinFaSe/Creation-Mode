@@ -68,7 +68,7 @@ async function main() {
     assert.ok(detailDifference > 1, 'High resolution must re-render text rather than enlarge the low-resolution PNG');
     assert.equal((await page.locator('#card').boundingBox()).width, previewSize.width);
 
-    for (const [example, fixture] of [['Básquet', 'original-basketball.html'], ['Ganada', 'original-won.html']]) {
+    for (const [example, fixture] of [['Básquet', 'original-basketball.html'], ['En vivo', 'original-live.html'], ['Ganada', 'original-won.html']]) {
       await page.selectOption('#quality', '1');
       await page.locator(`[data-example="${example}"]`).click();
       await ready();
@@ -129,21 +129,38 @@ async function main() {
     assert.equal(await page.locator('#home-score').isDisabled(), true);
     assert.equal(await page.locator('#time').isDisabled(), false);
 
+    await page.locator('[data-example="En vivo"]').click(); await ready();
+    assert.equal(await page.inputValue('#result'), 'live');
+    assert.match(await page.locator('#card').getAttribute('aria-label'), /En vivo.*4.º C 03:24.*98-95/);
+    assert.equal(await page.locator('#time').isDisabled(), true);
+    assert.equal(await page.locator('#live-clock').isDisabled(), false);
+    await page.fill('#home-score', '0'); await page.fill('#live-period', ''); await page.fill('#live-extra', '3'); await ready();
+    assert.match(await page.locator('#card').getAttribute('aria-label'), /03:24 \+3.*0-95/);
+    await page.fill('#live-clock', ''); await page.click('#download');
+    assert.equal(await page.locator('#live-clock').evaluate(e => e.validity.valid), false);
+    await page.selectOption('#result', 'won');
+    assert.equal(await page.locator('#live-clock').isDisabled(), true);
+    assert.equal(await page.locator('#live-extra').isDisabled(), true);
+    await page.selectOption('#result', 'pending');
+    assert.equal(await page.locator('#home-score').isDisabled(), true);
+    assert.doesNotMatch(await page.locator('#card').getAttribute('aria-label'), /En vivo|Ganada|Marcador/);
+
     await page.locator('[data-example="Básquet"]').click(); await ready();
     const before = await png(); await page.fill('#stake', '100'); await ready();
     assert.match(await page.locator('#return').innerText(), /183/); assert.equal(await png(), before);
+    await page.locator('[data-example="En vivo"]').click();
     const renders = new Set();
     for (const sport of ['Fútbol', 'Básquet', 'Béisbol']) {
       await page.locator(`[data-sport="${sport}"]`).click();
       for (const market of await page.locator('#market option').evaluateAll(options => options.map(o => o.value))) {
         await page.selectOption('#market', market);
-        for (const state of ['pending', 'won']) {
+        for (const state of ['pending', 'live', 'won']) {
           await page.selectOption('#result', state); await ready();
           renders.add(createHash('sha256').update(await png()).digest('hex'));
         }
       }
     }
-    assert.equal(renders.size, 36, 'All 18 markets must render in both states');
+    assert.equal(renders.size, 54, 'All 18 markets must render in all three states');
     await page.locator('[data-example="Fútbol"]').click();
     await page.fill('#home', 'Primero'); await page.fill('#home', 'Último equipo'); await ready();
     const last = await png(); await page.waitForTimeout(100); assert.equal(await png(), last);
@@ -160,7 +177,7 @@ async function main() {
     await broken.goto(url);
     await broken.waitForFunction(() => document.getElementById('status').textContent.includes('No se pudo'));
     assert.equal(await broken.locator('#download').isDisabled(), true);
-    console.log('36 card variants, form validation, render ordering, escaped text, mobile layout and missing font handling passed');
+    console.log('54 card variants, live controls, form validation, render ordering, escaped text, mobile layout and missing font handling passed');
   } finally {
     await browser?.close();
     await new Promise(resolve => server.close(resolve));

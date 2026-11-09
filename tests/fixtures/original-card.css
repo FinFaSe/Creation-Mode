@@ -118,3 +118,12 @@ svg { outline: none; }
 .bet-label--hasBackground[data-v-7d571c89] { padding: 1px 8px; border: 1px solid; border-radius: 16px; margin-left: 4px; }
 .bet-label--hasBackground.bet-label--Win[data-v-7d571c89] { color: var(--kds-sem-color-text-green); background: var(--kds-sem-color-bg-green-pale); border-color: var(--kds-sem-color-border-green-bold); }
 body{width:360px;margin:0;zoom:1.25;line-height:1}.share-bet-modal__body{min-height:270.4px}
+
+:root{--kds-sem-typography-small-text-bold:750 14px/20px "Ubuntu Sans";--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--kds-sem-color-bg-primary-default:#ff3c00;--kds-sem-color-text-gray-emphasis:#151923;--kds-sem-typography-font-weight-bold-plus:750;--kds-sem-border-radius-4:4px;--kds-sem-color-bg-container-low-default:#f7f9fc;--kds-sem-color-text-gray-subtle:#526789;--kds-sem-typography-font-family-default:"Ubuntu Sans";--kds-global-typography-font-weight-regular:;--kds-sem-color-bg-container-lowest-default:#fff;--kds-sem-color-border-container-lowest:#e2e8f8;--kds-sem-color-bg-gray-pale-default:#fff;--kds-sem-color-text-sky:#154fc1;--kds-sem-color-text-green:#107030;--kds-sem-typography-font-weight-regular-plus:450;--kds-sem-color-bg-gradient-primary-emphasis-start:#ff3c00;--kds-sem-color-bg-gradient-primary-emphasis-end:#ff0078;}
+.scores[data-v-9053eacd] { display: flex; font-size: 0.857143rem; line-height: 16px; font-weight: 700; color: var(--kds-sem-color-text-gray-subtle); }
+.scores .score[data-v-9053eacd] { display: flex; flex-direction: column; margin: 0px 4px; }
+.scores .score[data-v-9053eacd]:last-child { margin-right: 0px; }
+.scores .highlight[data-v-9053eacd] { color: var(--kds-sem-color-text-sky); }
+.time-info[data-v-26d54c64] { margin: 0px 8px 0px 4px; color: var(--kds-sem-color-text-gray-emphasis); font-weight: var(--kds-global-typography-font-weight-regular); font-size: 13px; line-height: 18px; }
+.time-info--highlighted[data-v-26d54c64] { color: var(--kds-sem-color-text-green); }
+.leg-scoreboard-container[data-v-93dd608f] { display: flex; align-items: center; margin-left: auto; }

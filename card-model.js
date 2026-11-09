@@ -40,15 +40,25 @@
       ? `Total de ${values.stat} [${values.player.trim() || 'Jugador'}]`
       : marketLabels[values.market] || values.market;
     const odds = Number(values.odds);
-    const result = values.result === 'won' ? 'won' : 'pending';
+    const result = ['won', 'live'].includes(values.result) ? values.result : 'pending';
     const score = value => /^\d{1,3}$/.test(String(value)) ? String(Number(value)) : '—';
-    return {
+    const card = {
       sport: values.sport, home, away, selection, market,
       time: values.time.trim(),
       result,
-      score: result === 'won' ? `${score(values.homeScore)}-${score(values.awayScore)}` : '',
+      score: result !== 'pending' ? `${score(values.homeScore)}-${score(values.awayScore)}` : '',
       odds: Number.isFinite(odds) && odds >= 1.01 && odds <= 9999 ? odds.toFixed(2) : '—'
     };
+    if (result === 'live') {
+      const extra = String(values.liveExtraTime ?? '').trim();
+      card.live = {
+        period: String(values.livePeriod ?? '').trim().slice(0, 12),
+        clock: String(values.liveClock ?? '').trim().slice(0, 16) || '—',
+        extraTime: /^[1-9]\d?$/.test(extra) ? extra : '',
+        homeScore: score(values.homeScore), awayScore: score(values.awayScore)
+      };
+    }
+    return card;
   }
 
   const api = { marketType, makeCardData };

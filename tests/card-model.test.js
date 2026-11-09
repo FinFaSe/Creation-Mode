@@ -34,6 +34,24 @@ test('winning reference keeps the odds, a manual result and the final score', ()
   assert.equal(card.score, '5-2');
 });
 
+test('live cards retain editable period, clock, added time and separate team scores', () => {
+  const card = makeCardData({ ...base, result: 'live', homeScore: '0', awayScore: '02',
+    livePeriod: ' 2.º T ', liveClock: ' 67:24 ', liveExtraTime: ' 3 ' });
+  assert.equal(card.result, 'live');
+  assert.equal(card.score, '0-2');
+  assert.deepEqual(card.live, { period: '2.º T', clock: '67:24', extraTime: '3', homeScore: '0', awayScore: '2' });
+});
+
+test('live fields allow empty periods and do not invent scores, clocks or added time', () => {
+  const values = { ...base, result: 'live', homeScore: '', awayScore: '-1', livePeriod: '', liveClock: '' };
+  for (const liveExtraTime of ['', '0', '-1', '1.5', '100']) {
+    const card = makeCardData({ ...values, liveExtraTime });
+    assert.equal(card.score, '—-—');
+    assert.deepEqual(card.live, { period: '', clock: '—', extraTime: '', homeScore: '—', awayScore: '—' });
+  }
+  for (const result of ['pending', 'won']) assert.equal('live' in makeCardData({ ...values, result }), false);
+});
+
 test('scores accept zero and reject invalid inputs without inventing a result', () => {
   assert.equal(makeCardData({ ...base, result: 'won', homeScore: '0', awayScore: '02' }).score, '0-2');
   for (const homeScore of ['', '-1', '1.5', '1000', 'NaN']) {
