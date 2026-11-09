@@ -90,6 +90,10 @@ function example(value) {
     '1T Puntos': { market: 'Primer Tiempo - Total de Puntos', line: '117.5', odds: '1.87', selection: 'Más de' },
     '1T Hándicap': { market: 'Primer Tiempo - Hándicap', line: '3.5', odds: '2.12', selection: 'home' }
   }[value];
+  const corners = {
+    'Córners Hándicap': { market: 'Hándicap de Córners - (2 bandas)', line: '-2.5', odds: '1.83', selection: 'home' },
+    'Córners 1T': { market: 'Córners en Primer Tiempo', line: '4.5', odds: '1.90', selection: 'Más de' }
+  }[value];
   const basketball = value === 'Básquet' || value === 'En vivo' || !!firstHalf;
   $('home').value = basketball ? 'Phoenix Suns' : 'CD Tecnico Universitario';
   $('away').value = basketball ? 'San Antonio Spurs' : 'Manta FC';
@@ -109,6 +113,16 @@ function example(value) {
     $('odds').value = firstHalf.odds;
     refreshSelection();
     $('selection').value = firstHalf.selection;
+  }
+  if (corners) {
+    $('home').value = 'Club Atlético Junior';
+    $('away').value = 'Cúcuta Deportivo';
+    $('time').value = 'Hoy 19:00';
+    $('market').value = corners.market;
+    $('line').value = corners.line;
+    $('odds').value = corners.odds;
+    refreshSelection();
+    $('selection').value = corners.selection;
   }
   if (value === 'En vivo') {
     $('home-score').value = '98';

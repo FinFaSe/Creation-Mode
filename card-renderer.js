@@ -14,7 +14,7 @@
       return response[type]();
     }
     const [design, font] = await Promise.all([
-      resource('./assets/card-design.json?v=first-half-1', 'json'),
+      resource('./assets/card-design.json?v=corners-1', 'json'),
       resource('./assets/fonts/UbuntuSans-variable.woff2', 'blob')
     ]);
     const fontUrl = await new Promise((resolve, reject) => {

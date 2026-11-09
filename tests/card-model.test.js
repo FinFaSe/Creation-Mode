@@ -42,6 +42,21 @@ test('legacy first-half market names use the exact first-half labels', () => {
   assert.equal(makeCardData({ ...base, market: 'Primer tiempo Total de puntos' }).market, 'Primer Tiempo - Total de Puntos');
 });
 
+test('football corner references match the supplied total and negative handicap', () => {
+  const values = { ...base, home: 'Club Atlético Junior', away: 'Cúcuta Deportivo', time: 'Hoy 19:00' };
+  const handicap = makeCardData({ ...values, market: 'Hándicap de Córners - (2 bandas)', selection: 'home', line: '-2.5', odds: '1.83' });
+  assert.equal(handicap.market, 'Hándicap de Córners - (2 bandas)');
+  assert.equal(handicap.selection, 'Club Atlético Junior -2.5');
+  assert.equal(handicap.odds, '1.83');
+  const total = makeCardData({ ...values, market: 'Córners en Primer Tiempo', selection: 'Más de', line: '4.5', odds: '1.90' });
+  assert.equal(total.market, 'Córners en Primer Tiempo');
+  assert.equal(total.selection, 'Más de 4.5');
+  assert.equal(total.odds, '1.90');
+  assert.equal(total.time, 'Hoy 19:00');
+  assert.equal(makeCardData({ ...values, market: 'Hándicap de corners' }).market, handicap.market);
+  assert.equal(makeCardData({ ...values, market: 'Corners en primer tiempo Más/Menos' }).market, total.market);
+});
+
 test('winning reference keeps the odds, a manual result and the final score', () => {
   const card = makeCardData({ ...base, home: 'RB Leipzig', away: 'FC Augsburg', market: 'Remates totales',
     selection: 'Menos de', line: '33.5', odds: '1.72', result: 'won', homeScore: '5', awayScore: '2' });

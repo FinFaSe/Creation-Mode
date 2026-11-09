@@ -22,3 +22,8 @@ component and CSS in the live HAR; the lightning icon is a local vector.
 The two first-half references use the new user-provided point and handicap
 examples. The Phoenix Suns and San Antonio Spurs badge data comes unchanged
 from image resources in the earlier HAR, embedded locally as data URLs.
+
+The two corner references use the existing frozen pending-card structure and
+original CSS, with the team names, markets, lines, odds and time from the latest
+football screenshots. Junior and Cúcuta badges were absent from the supplied HAR
+images, so these fixtures cover the text-only fallback, not badge fidelity.

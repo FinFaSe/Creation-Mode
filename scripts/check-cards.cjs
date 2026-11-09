@@ -70,7 +70,8 @@ async function main() {
 
     for (const [example, fixture] of [
       ['Básquet', 'original-basketball.html'], ['1T Puntos', 'original-first-half-points.html'],
-      ['1T Hándicap', 'original-first-half-handicap.html'], ['En vivo', 'original-live.html'], ['Ganada', 'original-won.html']
+      ['1T Hándicap', 'original-first-half-handicap.html'], ['Córners Hándicap', 'original-corners-handicap.html'],
+      ['Córners 1T', 'original-corners-first-half.html'], ['En vivo', 'original-live.html'], ['Ganada', 'original-won.html']
     ]) {
       await page.selectOption('#quality', '1');
       await page.locator(`[data-example="${example}"]`).click();
