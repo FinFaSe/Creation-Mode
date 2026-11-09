@@ -63,7 +63,11 @@ async function main() {
         return { rmse: Math.sqrt(squaredError / (450 * 338 * 3)), significant: significant / (450 * 338) };
       }, `data:image/png;base64,${reference.toString('base64')}`);
       // Tolerate rasterizer anti-aliasing, while detecting font, spacing and color regressions.
-      assert.ok(diff.rmse < 3 && diff.significant < 0.001, `${example} differs from the original CSS reference: ${JSON.stringify(diff)}`);
+      if (!(diff.rmse < 3 && diff.significant < 0.001)) {
+        const failure = new Error(`${example} differs from the original CSS reference: ${JSON.stringify(diff)}; browser=${browser.version()}`);
+        failure.cardPreview = await png();
+        throw failure;
+      }
       const preview = await png();
       const download = page.waitForEvent('download'); await page.click('#download');
       const file = await (await download).path();
@@ -123,6 +127,7 @@ main().catch(error => {
   if (process.env.GITHUB_ACTIONS) {
     const message = String(error.message).replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
     console.error(`::error title=Card browser validation::${message}`);
+    if (error.cardPreview) console.error(`::notice title=Public example rendering diagnostic::${error.cardPreview}`);
   }
   process.exitCode = 1;
 });
