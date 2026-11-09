@@ -27,9 +27,13 @@ Los botones «Cargar ejemplo» reproducen los datos de las capturas de fútbol y
 
 El estado «Ganada» añade la etiqueta verde, el icono de acierto y el marcador final editable, sustituyendo la fecha/hora. El ejemplo «Ganada» carga RB Leipzig / FC Augsburg, Menos de 33.5 remates totales, cuota 1.72 y marcador 5-2. El estado se elige manualmente; la aplicación no valida resultados deportivos.
 
-El fondo, el logo PNG y los SVG de básquet, fútbol, acierto y marcador se extrajeron del HTML aportado por el usuario. El icono de béisbol se dibujó como SVG local. El HTML no incluía hojas de estilo ni fuentes originales: las posiciones y tamaños se reconstruyeron a partir de las capturas y la tipografía se aproxima con Open Sans. No se ha verificado una coincidencia exacta píxel a píxel.
+El fondo, el logo PNG y los SVG de básquet, fútbol, acierto y marcador se extrajeron del HTML aportado por el usuario. El icono de béisbol se dibujó como SVG local. El HAR posterior permitió recuperar las reglas originales del componente y Ubuntu Sans variable, incluidos los pesos 450 y 750.
 
-Todos los recursos de la tarjeta se sirven localmente, incluidas las fuentes, para que la descarga no dependa de servidores externos. Open Sans es de Google Corporation y se distribuye bajo Apache 2.0; la licencia se incluye en `assets/fonts/LICENSE.txt`.
+`assets/card-design.json` contiene únicamente plantillas saneadas de los dos ejemplos públicos, sus reglas visuales, variables resueltas e iconos. No contiene el HAR, cabeceras, datos de sesión ni respuestas de la cuenta. Los datos editables se insertan con `textContent`.
+
+La exportación aplica las reglas originales dentro de un SVG aislado con la fuente embebida y lo dibuja en el canvas de 450 × 338. No necesita servicios externos. Un control de revisiones evita que una renderización anterior sustituya a una edición más reciente; la descarga espera a que termine la tarjeta actual.
+
+Ubuntu Sans pertenece a Canonical Ltd. y se distribuye sin modificaciones bajo Ubuntu Font Licence 1.0; se incluyen la licencia y los créditos en `assets/fonts/`. La fuente de marca decorativa y los recursos de otras secciones del sitio no se incorporan.
 
 GitHub Actions publica los archivos estáticos y la carpeta `assets/` en GitHub Pages con cada envío a `main`.
 
@@ -37,6 +41,14 @@ GitHub Actions publica los archivos estáticos y la carpeta `assets/` en GitHub 
 
 `npm test` ejecuta siete pruebas del modelo: los tres ejemplos, marcadores válidos e inválidos, hándicaps con signos y equipos renombrados, cuotas inválidas y los 18 mercados.
 
-El formato ganador se comprobó con Chromium en los 18 mercados, incluyendo exportación PNG de 450 × 338, marcador cero, validación de campos, retorno al estado pendiente, textos largos, marcadores de tres cifras y vista móvil de 390 y 320 px.
+Las pruebas de navegador requieren Node.js 20 o superior y las herramientas de desarrollo:
 
-Prueba de navegador con Chromium sobre una compilación estática bajo `/Creation-Mode/`: ambos ejemplos, fuentes e imágenes locales, selección de los 18 mercados, validación de jugador/cuota, cálculo de retorno sin modificar la imagen, descarga PNG idéntica a la vista previa de 450 × 338, textos largos y diseño móvil de 390 y 320 px sin desbordamiento. También se comprobó el mensaje de error y bloqueo de descarga cuando falla un recurso. Comprobación de sintaxis de JavaScript con Node.js.
+```sh
+npm ci
+npx playwright install --with-deps chromium
+npm run test:browser
+```
+
+Si Chromium ya está instalado, se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/ruta/a/chromium npm run test:browser`.
+
+El script prueba el sitio estático bajo `/Creation-Mode/`, sin conexiones externas. Compara los ejemplos de básquet y apuesta ganada con capturas del HTML y CSS originales, con tolerancia pequeña para diferencias de antialiasing. Comprueba que el PNG descargado coincide con la vista previa, los 36 casos de mercado/estado, marcador cero, validación de campos, cálculo de retorno sin alterar la tarjeta, orden de renderización, texto escapado, vista móvil de 390 y 320 px y errores de carga de fuente. Estas pruebas también se ejecutan antes de publicar en GitHub Actions.

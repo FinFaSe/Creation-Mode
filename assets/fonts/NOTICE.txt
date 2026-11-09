@@ -1,0 +1,8 @@
+Ubuntu Sans
+Copyright 2011, 2022, 2023 Canonical Ltd.
+Designed by Dalton Maag Ltd.
+
+The unmodified UbuntuSans-variable.woff2 file was extracted from the visual
+resources in the HAR supplied by the user. It is licensed under the Ubuntu
+Font Licence 1.0; see UbuntuSans-LICENSE.txt and the notices embedded in the font.
+https://ubuntu.com/legal/font-licence

@@ -36,13 +36,22 @@ function draw() {
       .map(id => [id, $(id).value])),
     result: $('result').value, homeScore: $('home-score').value, awayScore: $('away-score').value
   });
-  if (assets) CardRenderer.render(canvas, data, assets);
+  const painting = assets ? CardRenderer.render(canvas, data, assets) : Promise.resolve(false);
   const outcome = data.result === 'won' ? `Ganada. Marcador ${data.score}` : data.time;
   canvas.setAttribute('aria-label', `${data.home} contra ${data.away}. ${data.market}: ${data.selection}. Cuota ${data.odds}. ${outcome}`);
   const stake = Number($('stake').value);
   const odds = Number($('odds').value);
   $('return').textContent = stake > 0 && data.odds !== '—'
     ? (stake * odds).toLocaleString('es-CO', { style: 'currency', currency: $('currency').value }) : '—';
+  return painting.then(rendered => {
+    if (rendered) $('download').disabled = false;
+    return rendered;
+  }).catch(error => {
+    $('download').disabled = true;
+    $('status').textContent = 'No se pudo generar la tarjeta. Recarga la página para intentarlo otra vez.';
+    console.error(error);
+    return false;
+  });
 }
 
 function refreshResult() {
@@ -105,20 +114,26 @@ $('result').addEventListener('change', () => { refreshResult(); draw(); });
 ['home', 'away'].forEach(id => $(id).addEventListener('input', () => { refreshSelection(); draw(); }));
 $('editor').addEventListener('input', () => { $('status').textContent = ''; draw(); });
 $('editor').addEventListener('submit', event => event.preventDefault());
-$('download').addEventListener('click', () => {
+$('download').addEventListener('click', async () => {
   if (!assets || !$('editor').reportValidity()) return;
   if (!$('player-fields').hidden && !$('player').value.trim()) {
     $('player').focus(); $('status').textContent = 'Escribe el nombre del jugador.'; return;
   }
-  draw();
-  canvas.toBlob(blob => {
-    if (!blob) { $('status').textContent = 'No se pudo generar la imagen. Inténtalo otra vez.'; return; }
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.download = 'mi-jugada.png'; link.href = url; link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
-    $('status').textContent = 'Tarjeta descargada · 450 × 338 px.';
-  }, 'image/png');
+  try {
+    if (!await draw()) return;
+    await CardRenderer.ready(canvas);
+    canvas.toBlob(blob => {
+      if (!blob) { $('status').textContent = 'No se pudo generar la imagen. Inténtalo otra vez.'; return; }
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = 'mi-jugada.png'; link.href = url; link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      $('status').textContent = 'Tarjeta descargada · 450 × 338 px.';
+    }, 'image/png');
+  } catch (error) {
+    $('status').textContent = 'No se pudo descargar la tarjeta. Inténtalo otra vez.';
+    console.error(error);
+  }
 });
 
 example('Fútbol');
@@ -127,7 +142,6 @@ $('status').textContent = 'Cargando diseño…';
 CardRenderer.loadAssets().then(result => {
   assets = result;
   draw();
-  $('download').disabled = false;
   $('status').textContent = '';
 }).catch(error => {
   $('status').textContent = 'No se pudo cargar el diseño. Recarga la página para intentarlo otra vez.';

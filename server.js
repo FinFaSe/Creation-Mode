@@ -6,7 +6,8 @@ const publicFiles = { '/': ['index.html', 'text/html'], '/app.js': ['app.js', 't
 for (const name of ['card-model.js', 'card-renderer.js']) publicFiles[`/${name}`] = [name, 'text/javascript'];
 for (const name of ['football.svg', 'basketball.svg', 'baseball.svg', 'success.svg', 'score.svg']) publicFiles[`/assets/${name}`] = [`assets/${name}`, 'image/svg+xml'];
 for (const name of ['share-background.png', 'betano-logo.png']) publicFiles[`/assets/${name}`] = [`assets/${name}`, 'image/png'];
-for (const name of ['OpenSans-Regular.ttf', 'OpenSans-Bold.ttf']) publicFiles[`/assets/fonts/${name}`] = [`assets/fonts/${name}`, 'font/ttf'];
+publicFiles['/assets/card-design.json'] = ['assets/card-design.json', 'application/json'];
+publicFiles['/assets/fonts/UbuntuSans-variable.woff2'] = ['assets/fonts/UbuntuSans-variable.woff2', 'font/woff2'];
 http.createServer((req, res) => {
   const file = publicFiles[new URL(req.url, 'http://localhost').pathname];
   if (!file) { res.writeHead(404); res.end('No encontrado'); return; }
