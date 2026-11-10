@@ -1,8 +1,8 @@
 (function (root) {
   const marketLabels = {
-    'Goles totales Más/Menos': 'Goles Totales',
+    'Goles totales Más/Menos': 'Goles Totales Más/Menos',
     'Ambos equipos anotan primer tiempo': 'Ambos equipos anotan - 1.er tiempo',
-    'Más/Menos corners': 'Total de Córners',
+    'Más/Menos corners': 'Más/Menos corners',
     'Total de tarjetas': 'Total de Tarjetas',
     'Tiros al arco': 'Tiros al Arco',
     'Remates totales': 'Remates totales',
