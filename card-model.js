@@ -14,6 +14,17 @@
     'Primer tiempo Total de puntos': 'Primer Tiempo - Total de Puntos',
     'Total': 'Total de Carreras'
   };
+  const firstHalfLabels = {
+    'Total de Córners': 'Córners en Primer Tiempo',
+    'Total de Puntos': 'Primer Tiempo - Total de Puntos',
+    'Hándicap': 'Primer Tiempo - Hándicap'
+  };
+
+  function marketLabel(market) {
+    const firstHalf = /^(.+) - 1\.er tiempo$/.exec(market);
+    if (firstHalf) return firstHalfLabels[firstHalf[1]] || market;
+    return marketLabels[market] || market;
+  }
 
   function marketType(market) {
     if (market.startsWith('Ambos')) return 'yes-no';
@@ -39,7 +50,7 @@
     const playerMarket = values.market.startsWith('Jugador');
     const market = playerMarket
       ? `Total de ${values.stat} [${values.player.trim() || 'Jugador'}]`
-      : marketLabels[values.market] || values.market;
+      : marketLabel(values.market);
     const odds = Number(values.odds);
     const result = ['won', 'live'].includes(values.result) ? values.result : 'pending';
     const score = value => /^\d{1,3}$/.test(String(value)) ? String(Number(value)) : '—';
