@@ -40,6 +40,19 @@ test('first-half basketball references match the supplied point and handicap car
 test('legacy first-half market names use the exact first-half labels', () => {
   assert.equal(makeCardData({ ...base, market: 'Primer tiempo Hándicap' }).market, 'Primer Tiempo - Hándicap');
   assert.equal(makeCardData({ ...base, market: 'Primer tiempo Total de puntos' }).market, 'Primer Tiempo - Total de Puntos');
+  assert.equal(makeCardData({ ...base, market: 'Hándicap - 1.er tiempo' }).market, 'Primer Tiempo - Hándicap');
+  assert.equal(makeCardData({ ...base, market: 'Total de Puntos - 1.er tiempo' }).market, 'Primer Tiempo - Total de Puntos');
+});
+
+test('old corner card labels render the supplied labels with manually entered teams', () => {
+  const total = makeCardData({ ...base, market: 'Total de Córners - 1.er tiempo', selection: 'Más de' });
+  assert.equal(total.market, 'Córners en Primer Tiempo');
+  assert.equal(total.selection, 'Más de 2.5');
+  assert.equal(total.home, 'CD Tecnico Universitario');
+  assert.equal(total.away, 'Manta FC');
+  const handicap = makeCardData({ ...base, market: 'Hándicap de Córners', selection: 'away', line: '-2.5' });
+  assert.equal(handicap.market, 'Hándicap de Córners - (2 bandas)');
+  assert.equal(handicap.selection, 'Manta FC -2.5');
 });
 
 test('football corner references match the supplied total and negative handicap', () => {

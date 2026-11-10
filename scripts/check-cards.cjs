@@ -68,6 +68,7 @@ async function main() {
     assert.ok(detailDifference > 1, 'High resolution must re-render text rather than enlarge the low-resolution PNG');
     assert.equal((await page.locator('#card').boundingBox()).width, previewSize.width);
 
+    const referencePNGs = new Map();
     for (const [example, fixture] of [
       ['Básquet', 'original-basketball.html'], ['1T Puntos', 'original-first-half-points.html'],
       ['1T Hándicap', 'original-first-half-handicap.html'], ['Córners Hándicap', 'original-corners-handicap.html'],
@@ -108,6 +109,7 @@ async function main() {
         throw failure;
       }
       const preview = await png();
+      referencePNGs.set(example, preview);
       const download = page.waitForEvent('download'); await page.click('#download');
       const file = await (await download).path();
       assert.deepEqual(await fs.readFile(file), Buffer.from(preview.split(',')[1], 'base64'));
@@ -132,6 +134,33 @@ async function main() {
     await page.selectOption('#result', 'pending');
     assert.equal(await page.locator('#home-score').isDisabled(), true);
     assert.equal(await page.locator('#time').isDisabled(), false);
+
+    // The normal market selector must produce the same verified card as the
+    // example shortcuts. Check all four reported markets through manual edits.
+    await page.selectOption('#quality', '1');
+    for (const scenario of [
+      { example: '1T Puntos', sport: 'Básquet', home: 'Phoenix Suns', away: 'San Antonio Spurs',
+        market: 'Primer Tiempo - Total de Puntos', selection: 'Más de', line: '117.5', odds: '1.87', time: 'Esta noche 21:00' },
+      { example: '1T Hándicap', sport: 'Básquet', home: 'Phoenix Suns', away: 'San Antonio Spurs',
+        market: 'Primer Tiempo - Hándicap', selection: 'home', line: '3.5', odds: '2.12', time: 'Esta noche 21:00' },
+      { example: 'Córners Hándicap', sport: 'Fútbol', home: 'Club Atlético Junior', away: 'Cúcuta Deportivo',
+        market: 'Hándicap de Córners - (2 bandas)', selection: 'home', line: '-2.5', odds: '1.83', time: 'Hoy 19:00' },
+      { example: 'Córners 1T', sport: 'Fútbol', home: 'Club Atlético Junior', away: 'Cúcuta Deportivo',
+        market: 'Córners en Primer Tiempo', selection: 'Más de', line: '4.5', odds: '1.90', time: 'Hoy 19:00' }
+    ]) {
+      await page.locator(`[data-sport="${scenario.sport}"]`).click();
+      for (const field of ['home', 'away', 'time', 'odds']) await page.fill(`#${field}`, scenario[field]);
+      await page.selectOption('#market', scenario.market);
+      await page.fill('#line', scenario.line);
+      await page.selectOption('#selection', scenario.selection);
+      await ready();
+      assert.ok((await page.locator('#card').getAttribute('aria-label')).includes(scenario.market));
+      const preview = await png();
+      assert.equal(preview, referencePNGs.get(scenario.example), `${scenario.market}: manual editor must match the verified reference`);
+      const download = page.waitForEvent('download'); await page.click('#download');
+      assert.deepEqual(await fs.readFile(await (await download).path()), Buffer.from(preview.split(',')[1], 'base64'));
+    }
+    console.log('Manual market selection and PNG downloads match all four first-half and corner references');
 
     await page.locator('[data-example="En vivo"]').click(); await ready();
     assert.equal(await page.inputValue('#result'), 'live');

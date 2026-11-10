@@ -29,6 +29,8 @@ Los mercados de básquet de primer tiempo usan los rótulos `Primer Tiempo - Tot
 
 Los mercados de fútbol usan los rótulos `Hándicap de Córners - (2 bandas)` y `Córners en Primer Tiempo`. Los ejemplos «Córners · Hándicap» y «Córners · 1T» cargan Club Atlético Junior / Cúcuta Deportivo, Hoy 19:00, con Junior -2.5 a cuota 1.83 o Más de 4.5 a cuota 1.90. Los escudos de estos dos equipos no están entre las imágenes de los HAR aportados; estos ejemplos muestran los nombres sin escudos.
 
+Los mismos rótulos se aplican al elegir los mercados y escribir cualquier equipo en el formulario. El modelo también traduce los rótulos antiguos, incluido `Total de Córners - 1.er tiempo`, a los nombres de las capturas de referencia.
+
 El estado «Ganada» añade la etiqueta verde, el icono de acierto y el marcador final editable, sustituyendo la fecha/hora. El ejemplo «Ganada» carga RB Leipzig / FC Augsburg, Menos de 33.5 remates totales, cuota 1.72 y marcador 5-2. El estado se elige manualmente; la aplicación no valida resultados deportivos.
 
 El estado «En vivo» muestra el rayo, un periodo opcional, el tiempo de juego, el tiempo añadido opcional y los marcadores de los equipos en dos filas a la derecha. El ejemplo «En vivo» usa los equipos públicos de la captura anterior de básquet, 4.º cuarto, 03:24 y marcador 98-95. Todos estos datos son editables; el reloj no avanza automáticamente. Los campos de tiempo en vivo y marcador se desactivan al cambiar a «Pendiente»; los campos de tiempo en vivo se desactivan en «Ganada».
@@ -45,11 +47,11 @@ No necesita servicios externos. Un control de revisiones evita que una renderiza
 
 Ubuntu Sans pertenece a Canonical Ltd. y se distribuye sin modificaciones bajo Ubuntu Font Licence 1.0; se incluyen la licencia y los créditos en `assets/fonts/`. La fuente de marca decorativa y los recursos de otras secciones del sitio no se incorporan.
 
-GitHub Actions publica los archivos estáticos y la carpeta `assets/` en GitHub Pages con cada envío a `main`.
+GitHub Actions valida y prepara los archivos estáticos y la carpeta `assets/` con cada envío a `main`. La publicación se ejecuta en un trabajo separado, sujeto a las protecciones existentes del entorno `github-pages`. Un nuevo envío cancela las ejecuciones anteriores para que una aprobación antigua no bloquee la última versión. Si hay una aprobación pendiente, el código puede estar en `main` mientras la página pública todavía muestra la versión anterior.
 
 ## Validación realizada
 
-`npm test` ejecuta doce pruebas del modelo: los ejemplos de primer tiempo, córners y los demás ejemplos, los campos en vivo, marcadores válidos e inválidos, hándicaps con signos y equipos renombrados, cuotas inválidas y los 18 mercados.
+`npm test` ejecuta trece pruebas del modelo: los ejemplos de primer tiempo, córners y los demás ejemplos, los rótulos antiguos, los campos en vivo, marcadores válidos e inválidos, hándicaps con signos y equipos renombrados, cuotas inválidas y los 18 mercados.
 
 Las pruebas de navegador requieren Node.js 20 o superior y las herramientas de desarrollo:
 
@@ -64,5 +66,7 @@ Si Chromium ya está instalado, se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/r
 El script prueba el sitio estático bajo `/Creation-Mode/`, sin conexiones externas. Compara los ejemplos de básquet, ambos mercados de primer tiempo, ambos ejemplos de córners, en vivo y apuesta ganada con sus referencias independientes de HTML y CSS. Renderiza esas referencias en el mismo navegador y sistema operativo que la exportación y aplica una tolerancia pequeña de antialiasing. Comprueba también el checksum de la fuente original. Comprueba que el PNG descargado coincide con la vista previa, los 54 casos de mercado/estado, marcador cero, periodo opcional, tiempo añadido, validación y desactivación de campos, cálculo de retorno sin alterar la tarjeta, orden de renderización, texto escapado, vista móvil de 390 y 320 px y errores de carga de fuente. Estas pruebas también se ejecutan antes de publicar en GitHub Actions.
 
 La prueba de calidad verifica el valor 4× predeterminado, las dimensiones codificadas en los PNG 1×/2×/4×, el tamaño constante de la vista previa y el detalle del texto de alta resolución frente a ampliar una imagen de baja resolución.
+
+Los cuatro mercados de primer tiempo y córners también se seleccionan y rellenan manualmente, sin usar los botones de ejemplo. Sus PNG descargados deben coincidir con las tarjetas ya verificadas contra el HTML y CSS de referencia.
 
 Playwright está fijado en 1.64.0 para usar Chromium 156. Las referencias se renderizan durante la prueba para controlar las diferencias de tipografía entre sistemas operativos. El tamaño raíz original de 14px se resuelve antes de insertar el CSS en el SVG para mantener las unidades `rem` consistentes.
