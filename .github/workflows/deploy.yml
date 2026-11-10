@@ -14,7 +14,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
       contents: read
       pages: read
@@ -34,9 +35,22 @@ jobs:
           node --check card-model.js
           node --check card-renderer.js
           npm test
-      - name: Instalar Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Localizar el navegador instalado
+        id: browser
+        run: |
+          for candidate in google-chrome google-chrome-stable chromium chromium-browser; do
+            if browser_path="$(command -v "$candidate")"; then
+              "$browser_path" --version
+              echo "executable=$browser_path" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done
+          echo "::error::No se encontró Chrome o Chromium en el runner."
+          exit 1
       - name: Comparar tarjetas con el diseño original
+        timeout-minutes: 5
+        env:
+          PLAYWRIGHT_CHROMIUM_EXECUTABLE: ${{ steps.browser.outputs.executable }}
         run: npm run test:browser
       - name: Preparar sitio estático
         run: |
@@ -49,7 +63,8 @@ jobs:
           path: _site
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
       pages: write
       id-token: write

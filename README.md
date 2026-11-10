@@ -49,6 +49,8 @@ Ubuntu Sans pertenece a Canonical Ltd. y se distribuye sin modificaciones bajo U
 
 GitHub Actions valida y prepara los archivos estáticos y la carpeta `assets/` con cada envío a `main`. La publicación se ejecuta en un trabajo separado, sujeto a las protecciones existentes del entorno `github-pages`. Un nuevo envío cancela las ejecuciones anteriores para que una aprobación antigua no bloquee la última versión. Si hay una aprobación pendiente, el código puede estar en `main` mientras la página pública todavía muestra la versión anterior.
 
+Actions usa `ubuntu-24.04` y el Chrome o Chromium que ya trae el runner. No descarga ni instala otro navegador durante la publicación. Las pruebas visuales siguen siendo obligatorias; si falta el navegador o una prueba falla, no se publica. Los trabajos tienen un límite de diez minutos y la comparación visual de cinco minutos.
+
 ## Validación realizada
 
 `npm test` ejecuta trece pruebas del modelo: los ejemplos de primer tiempo, córners y los demás ejemplos, los rótulos antiguos, los campos en vivo, marcadores válidos e inválidos, hándicaps con signos y equipos renombrados, cuotas inválidas y los 18 mercados.
@@ -69,4 +71,4 @@ La prueba de calidad verifica el valor 4× predeterminado, las dimensiones codif
 
 Los cuatro mercados de primer tiempo y córners también se seleccionan y rellenan manualmente, sin usar los botones de ejemplo. Sus PNG descargados deben coincidir con las tarjetas ya verificadas contra el HTML y CSS de referencia.
 
-Playwright está fijado en 1.64.0 para usar Chromium 156. Las referencias se renderizan durante la prueba para controlar las diferencias de tipografía entre sistemas operativos. El tamaño raíz original de 14px se resuelve antes de insertar el CSS en el SVG para mantener las unidades `rem` consistentes.
+Playwright está fijado en 1.64.0. En Actions utiliza el navegador instalado en el runner; localmente se puede indicar su ruta o instalar el Chromium de Playwright. Las referencias se renderizan durante la prueba en el mismo navegador para controlar las diferencias de tipografía entre sistemas operativos. El tamaño raíz original de 14px se resuelve antes de insertar el CSS en el SVG para mantener las unidades `rem` consistentes.
