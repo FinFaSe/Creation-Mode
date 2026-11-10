@@ -7,14 +7,11 @@
     'Tiros al arco': 'Tiros al Arco',
     'Remates totales': 'Remates totales',
     'Corners en primer tiempo Más/Menos': 'Córners en Primer Tiempo',
-    'Total de Córners - 1.er tiempo': 'Córners en Primer Tiempo',
     'Hándicap de corners': 'Hándicap de Córners - (2 bandas)',
     'Hándicap de Córners': 'Hándicap de Córners - (2 bandas)',
     'Total de puntos': 'Total de Puntos',
     'Primer tiempo Hándicap': 'Primer Tiempo - Hándicap',
-    'Hándicap - 1.er tiempo': 'Primer Tiempo - Hándicap',
     'Primer tiempo Total de puntos': 'Primer Tiempo - Total de Puntos',
-    'Total de Puntos - 1.er tiempo': 'Primer Tiempo - Total de Puntos',
     'Total': 'Total de Carreras'
   };
 
