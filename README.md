@@ -21,6 +21,33 @@ El servidor usa el puerto 3000; se puede cambiar con la variable `PORT`.
 
 Los equipos, jugadores, cuotas, marcadores y tiempos se introducen manualmente. La aplicación no consulta datos deportivos ni procesa apuestas. El aviso de muestra se muestra en el editor. Los datos se mantienen solo durante la sesión de la página.
 
+## Cambiar nombres en la tarjeta
+
+Edita el primer bloque `marketLabels` de `card-model.js`. En cada línea, conserva la clave de la izquierda y cambia únicamente el texto de la derecha:
+
+```js
+'Más/Menos corners': 'Córners totales del partido',
+```
+
+Esto cambia el nombre impreso en la tarjeta; la opción del selector conserva su nombre. Mantén las comillas y la coma final. No incluyas aquí la línea, los equipos o la cuota: se introducen en sus propios campos.
+
+Los cuatro mercados de primer tiempo y córners tienen entradas directas en ese mismo bloque:
+
+```js
+'Córners en Primer Tiempo': 'Córners en Primer Tiempo',
+'Hándicap de Córners - (2 bandas)': 'Hándicap de Córners - (2 bandas)',
+'Primer Tiempo - Hándicap': 'Primer Tiempo - Hándicap',
+'Primer Tiempo - Total de Puntos': 'Primer Tiempo - Total de Puntos',
+```
+
+Para renombrarlos, cambia solo el segundo texto de cada línea. Las entradas con nombres antiguos, como `Corners en primer tiempo Más/Menos`, aceptan datos anteriores y no son las claves del selector actual.
+
+`markets.js` define las opciones del selector. Cambiar una clave allí también exige actualizar las referencias en `app.js`, la clasificación del mercado cuando corresponda y las pruebas. Para cambiar solo el nombre de la tarjeta, basta con `marketLabels`. Las selecciones como `Más de 4.5` o `Club Atlético Junior -2.5` se forman a partir del equipo, la selección y la línea, no de este bloque.
+
+Guarda los cambios en `main` y espera a que tanto `build` como `deploy` terminen correctamente en GitHub Actions. Si falla alguno, la página mantiene la publicación anterior. Después vuelve a abrir la página o usa Ctrl + F5. Cada publicación añade la revisión del commit a las direcciones de scripts y estilos para solicitar la versión nueva.
+
+Las pruebas de los cuatro ejemplos de primer tiempo y córners verifican los textos de las capturas originales. Si decides cambiar esos textos, también hay que actualizar las expectativas de `tests/card-model.test.js`, los rótulos de las referencias HTML correspondientes en `tests/fixtures/` y la comprobación de nombres del editor manual en `scripts/check-cards.cjs`. Conserva las comprobaciones visuales; un cambio intencional de nombre necesita nuevas expectativas, no saltarse las pruebas.
+
 ## Diseño de referencia
 
 Los botones «Cargar ejemplo» reproducen los datos de las capturas de fútbol y básquet. En los mercados de jugador, el nombre se muestra entre corchetes dentro del mercado: `Total de Puntos [Victor Wembanyama]`; la selección queda como `Más de 28.5`.

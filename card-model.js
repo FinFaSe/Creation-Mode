@@ -1,4 +1,5 @@
 (function (root) {
+  // Cambia solo los textos de la derecha; las claves identifican el mercado.
   const marketLabels = {
     'Goles totales Más/Menos': 'Goles Totales Más/Menos',
     'Ambos equipos anotan primer tiempo': 'Ambos equipos anotan - 1.er tiempo',
@@ -6,6 +7,10 @@
     'Total de tarjetas': 'Total de Tarjetas',
     'Tiros al arco': 'Tiros al Arco',
     'Remates totales': 'Remates totales',
+    'Córners en Primer Tiempo': 'Córners en Primer Tiempo',
+    'Hándicap de Córners - (2 bandas)': 'Hándicap de Córners - (2 bandas)',
+    'Primer Tiempo - Hándicap': 'Primer Tiempo - Hándicap',
+    'Primer Tiempo - Total de Puntos': 'Primer Tiempo - Total de Puntos',
     'Corners en primer tiempo Más/Menos': 'Córners en Primer Tiempo',
     'Hándicap de corners': 'Hándicap de Córners - (2 bandas)',
     'Hándicap de Córners': 'Hándicap de Córners - (2 bandas)',
@@ -22,8 +27,8 @@
 
   function marketLabel(market) {
     const firstHalf = /^(.+) - 1\.er tiempo$/.exec(market);
-    if (firstHalf) return firstHalfLabels[firstHalf[1]] || market;
-    return marketLabels[market] || market;
+    const key = firstHalf ? firstHalfLabels[firstHalf[1]] || market : market;
+    return marketLabels[key] || key;
   }
 
   function marketType(market) {

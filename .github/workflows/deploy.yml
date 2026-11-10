@@ -57,6 +57,20 @@ jobs:
           mkdir -p _site
           cp index.html styles.css app.js markets.js card-model.js card-renderer.js _site/
           cp -R assets _site/assets
+      - name: Versionar scripts y estilos para actualizar la caché
+        env:
+          SITE_REVISION: ${{ github.sha }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const revision = process.env.SITE_REVISION;
+          if (!/^[0-9a-f]{40}$/.test(revision)) throw new Error('Falta la revisión del sitio.');
+          const file = '_site/index.html';
+          const html = fs.readFileSync(file, 'utf8');
+          const versioned = html.replace(/((?:src|href)="\.\/[^"?]+)\?v=[^"]*"/g,
+            (_match, prefix) => prefix + '?v=' + revision + '"');
+          fs.writeFileSync(file, versioned);
+          NODE
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
