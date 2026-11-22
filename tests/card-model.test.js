@@ -20,7 +20,7 @@ test('basketball reference places the player in brackets in the market only', ()
   const card = makeCardData({ ...base, sport: 'Básquet', home: 'Phoenix Suns', away: 'San Antonio Spurs',
     market: 'Jugador · Más/Menos', selection: 'Más de', line: '28.5', odds: '1.83', time: 'Esta noche 21:00' });
   assert.equal(card.selection, 'Más de 28.5');
-  assert.equal(card.market, 'Total de Puntos [Victor Wembanyama]');
+  assert.equal(card.market, 'Puntos [Victor Wembanyama]');
   assert.equal(card.odds, '1.83');
 });
 
