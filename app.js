@@ -100,7 +100,7 @@ function example(value) {
   $('odds').value = basketball ? '1.83' : '2.02';
   $('time').value = basketball ? 'Esta noche 21:00' : 'Hoy 15:30';
   $('player').value = 'Victor Wembanyama';
-  $('stat').value = 'Puntos';
+  $('stat').value = 'Total de Puntos';
   $('line').value = basketball ? '28.5' : '2.5';
   setSport(basketball ? 'Básquet' : 'Fútbol');
   $('market').value = basketball ? 'Jugador · Más/Menos' : 'Ambos equipos anotan';
