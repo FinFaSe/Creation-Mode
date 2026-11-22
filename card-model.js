@@ -54,7 +54,7 @@
     }
     const playerMarket = values.market.startsWith('Jugador');
     const market = playerMarket
-      ? `Total de ${values.stat} [${values.player.trim() || 'Jugador'}]`
+      ? `${values.stat} [${values.player.trim() || 'Jugador'}]`
       : marketLabel(values.market);
     const odds = Number(values.odds);
     const result = ['won', 'live'].includes(values.result) ? values.result : 'pending';
